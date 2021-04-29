@@ -10,13 +10,13 @@ import java.io.Serializable;
  ***************/
 
 public class MovePlayerMessage extends Message implements Serializable {
-    double playerDX;
-    double playerDY;
+    int x;
+    int y;
 
-    public MovePlayerMessage(double playerDX, double playerDY)
+    public MovePlayerMessage(int x, int y)
     {
-        this.playerDX = playerDX;
-        this.playerDY = playerDY;
+        this.x = x;
+        this.y = y;
     }
     
 }

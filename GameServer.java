@@ -12,20 +12,12 @@
  *  4. One thread responsible for transmiting the gameState to all clients
  * Note that this server can handle multiple types of games.
  ***************/
-import java.util.ArrayList;
 import java.awt.Color;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.*;
 
-import java.io.PrintWriter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.IOException;
 
 public class GameServer implements Runnable {
     GameState gameState;
@@ -92,7 +84,7 @@ public class GameServer implements Runnable {
          **/
         private void processMessage(Object message) {
             // Process the line
-            debug.println(3, "Processing message: " + message);
+            //debug.println(3, "Processing message: " + message);
 
             if (message instanceof JoinMessage)
             {
@@ -109,7 +101,7 @@ public class GameServer implements Runnable {
 
         private void processMovePlayerMessage(MovePlayerMessage message) {
             if (this.playerID == -1) return;
-            gameEngine.setPlayerDirection(this.playerID, message.playerDX, message.playerDY);
+            gameEngine.setPlayerLocation(this.playerID, message.x, message.y);
         }
 
 
@@ -226,36 +218,20 @@ public class GameServer implements Runnable {
         return gameState.addPlayer(name, color);
     }
 
-    /**
-     * Set a player p's direction to dx and dy.
-     * This moves all cells in that direction
-     * @param p The player (index) to move
-     * @param dx The amount to move in the x direction
-     * @param dy The amount to move in the y direction
-     **/
-    public synchronized void setPlayerDirection(int p, double dx, double dy) {
-        gameState.setPlayerDirection(p, dx, dy);
-    }
-
-    /**
-     * Split all cells for this player by the given fraction amount in their moving direction
-     **/
-    public synchronized void splitCells(int p, double fraction) {
-        gameState.splitCells(p, fraction);
-    }
-
     private void createGameStateTransmitter() {
         //we create an anonymous class for the thread
         Thread t = new Thread() {
             public void run() {
                 while (!done) {
-                    debug.println(3, "Transmitting game states.");
+                    //debug.println(3, "Transmitting game states.");
                     if (gameEngine != null)
-                    {
+                    {	
+                    	//debug.println(3, "Transmitting game states.");
                         GameState currentGameState = gameEngine.getGameState();
                         //transmit game state to every connection
                         //ONLY transmit if the player is registered
                         for (Connection con : connection) {
+                        	
                             if (con.playerID != -1)
                             {
                                 con.transmitMessage(currentGameState);
