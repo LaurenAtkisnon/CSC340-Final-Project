@@ -159,12 +159,16 @@ public class Grid extends JPanel {
     	//System.out.println("Let's draw the board");
         // Iterate through all of the players and all of the cells in the game
         // Again, not done super efficiently - could crop ones that are not visible!
+    	/*
         ArrayList<GameState.Player> player = gameState.getPlayers();
         for (GameState.Player p: player) {
             drawPlayer(p, g);
         }
+        */
+    	drawGrid(gameState, g);
     }
-
+    
+    /*
      // Draw the cells for this player
      private void drawPlayer(GameState.Player p, Graphics2D g) {
         g.setPaint(p.appearance);
@@ -172,4 +176,27 @@ public class Grid extends JPanel {
         System.out.println("X Coordinate: " + p.locx + ", Y Coordinate: " + p.locy);
         System.out.println("Let's draw Player: " + p.gridID);
     }
+    */
+     
+     //Draw the Grid with the players
+     private void drawGrid(GameState gameState, Graphics2D g) {
+    	 for (int x = 0; x < GRID_WIDTH; x++) {
+    		 int[][] grid = gameState.getGrid();
+    		 
+             for (int y = 0; y <GRID_HEIGHT; y++) {
+               if (grid[x][y] != 0){
+            	   for (GameState.Player p: gameState.getPlayers()) {
+            		   if (grid[x][y] == p.gridID){
+                           g.setColor(p.appearance);
+                           g.fillRect(x * 5, y *5, 5, 5);
+                           
+                           break;
+                       } 
+                   }
+                   
+                   
+               }
+             }
+         }
+     }
 }
