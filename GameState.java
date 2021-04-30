@@ -29,7 +29,7 @@ public class GameState implements Cloneable, Serializable {
         public static final int DIRECTION_SOUTH = 2; //SOUTH
         public static final int DIRECTION_WEST = 3; //WEST
 
-    	
+    	boolean dead = false;
         String name;  // Name to display
         Color appearance;  // The appearance of this player and its corresponding lines
         int gridID; //the value of grid coordinates pertaining to this player
@@ -72,25 +72,31 @@ public class GameState implements Cloneable, Serializable {
         	 switch(direction) {
 
              case DIRECTION_NORTH:
-                 if (checkLocation(this.locx, this.locy-1)) {
+                 if (boundCheck(this.locx, this.locy-1)) {
                      this.locy --;
-                 } break;
+                 }
+                 break;
 
              case DIRECTION_EAST:
-                 if (checkLocation(this.locx +1, this.locy)) {
+                 if (boundCheck(this.locx +1, this.locy)) {
                      this.locx ++;
                  } break;
 
              case DIRECTION_SOUTH:
-                 if (checkLocation(this.locx, this.locy+1)) {
+                 if (boundCheck(this.locx, this.locy+1)) {
                      this.locy++;
                  } break;
 
              case DIRECTION_WEST:
-                 if (checkLocation(this.locx-1, this.locy)) {
+                 if (boundCheck(this.locx-1, this.locy)) {
                      this.locx --;
                  } break;
              }
+        	 
+        	 if(!lineCollisionCheck(this.locx, this.locy))
+        	 {
+        		 this.dead = true;
+        	 }
         }
         
         public void turnWest(){
@@ -234,13 +240,22 @@ public class GameState implements Cloneable, Serializable {
     {
     	for (GameState.Player p : this.getPlayers())
     	{
-    		this.grid[p.locx][p.locy] = p.gridID;
+    		if (!p.dead)
+    		{
+    			this.grid[p.locx][p.locy] = p.gridID;
+    		}
+    		
     	}
     }
     
     //verify if location is valid
-    public boolean checkLocation(int x, int y) {
-        return x > 0 && x < this.grid.length && y > 0 && y < this.grid[0].length && this.grid[x][y] == 0;
+    public boolean boundCheck(int x, int y) {
+    	return x > 0 && x < this.grid.length && y > 0 && y < this.grid[0].length;
+    }
+    
+    public boolean lineCollisionCheck(int x, int y)
+    {
+    	return this.grid[x][y] == 0;
     }
 
     // Returns the list of players.  Probably safer to have some way to iterate through them and the cells

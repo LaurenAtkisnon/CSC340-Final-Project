@@ -87,17 +87,7 @@ public class Grid extends JPanel {
     public void turnWest(){
         controlledBike.turnWest();
     }
-    //signals to stop moving
-    public void stop(){
-        controlledBike.stop();
-    }
-    
-    //pauses movement (for debugging purposes
-    public void pauseMovement()
-    {
-    	controlledBike.pauseOrResume();
-    }
-    
+        
     //popup saying you won
     public void won(){
         JOptionPane.showMessageDialog(this, "You Win!");

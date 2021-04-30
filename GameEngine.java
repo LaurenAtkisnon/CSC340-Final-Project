@@ -20,11 +20,12 @@ import java.io.IOException;
 public class GameEngine implements Runnable {
     GameState gameState;
     Debug debug;
-
+    boolean activeGame;
     boolean done;
 
     public GameEngine()
     {
+    	this.activeGame = true;
         gameState = new GameState();
         debug = Debug.getInstance();
     }
@@ -122,11 +123,18 @@ public class GameEngine implements Runnable {
         while (!gameState.isDone()) {
             debug.println(10, "(GameEngine.run) Executing...");
             
-            //Move Players
-            movePlayers();
-
-            // Detect all collisions
-            detectCollisions();
+            if (this.activeGame)
+            {
+            	//Move Players
+                movePlayers();
+                
+                //Check if game is over
+                if(checkIfGameOver())
+            	{
+                	this.activeGame = false;
+                	//gameState.endCurrentGame();
+            	}
+            }       
 
             try {
                 Thread.sleep(GameServer.GAME_STATE_REFRESH);
@@ -156,11 +164,42 @@ public class GameEngine implements Runnable {
             GameState.Player p = player.get(i);
             p.move();
 
-        }
+        }        
         
         //next, we need to update the grid to reflect the new position of each player
         gameState.updateGrid();
     	
+    }
+    
+    private synchronized boolean checkIfGameOver() {
+    	ArrayList<GameState.Player> player = gameState.getPlayers();
+    	int size = player.size();
+    	if (size > 0)
+    	{
+    		int alive = 0;
+            for (int i = 0; i < size; i++) {
+                GameState.Player p = player.get(i);
+                if (!p.dead)
+                {
+                	alive++;
+                }
+            }   
+            //a multiplayer game ends when there is only one player left standing
+            if (size > 1)
+            {
+            	return alive == 1;	
+            }
+            else
+            {
+            	//in single player mode, the game simply ends when the only player dies
+            	return alive == 0;
+            }
+    	}
+    	
+    	return false;
+    	
+        
+       	
     }
 }
 

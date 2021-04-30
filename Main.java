@@ -144,9 +144,11 @@ public class Main extends JFrame implements KeyListener, MouseListener {
             case KeyEvent.VK_S:
                 gameGrid.turnSouth();
                 break;
+            /*    
             case KeyEvent.VK_SPACE:
                 gameGrid.pauseMovement(); // for debugging purposes
                 break;
+             */
             default:
                 break;
         }

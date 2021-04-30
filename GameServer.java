@@ -22,7 +22,7 @@ import java.io.*;
 public class GameServer implements Runnable {
     GameState gameState;
     GameEngine gameEngine;
-    public static final int GAME_STATE_REFRESH=16;
+    public static final int GAME_STATE_REFRESH=75;
     Debug debug;
     HashSet<Connection> connection; // The set of client connections
 
