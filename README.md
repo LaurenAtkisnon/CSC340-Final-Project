@@ -1,4 +1,3 @@
-# CSC340 Final Project
 # Tron.io
 ------------
 This project is a simple network game using the client-server model. 
