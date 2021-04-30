@@ -72,11 +72,18 @@ public class NetworkConnector {
         JoinMessage message = new JoinMessage(this.username, color);
         transmitMessage(message);
         
-    }    
+    } 
+    /*
     //send the current x&y position of the user bike (NOT COMP)
     public void sendLocation(int x, int y) {
         //sendCommand("set-location", ("" + x + "," + y));
     	transmitMessage(new MovePlayerMessage(x, y));
+    }
+    */
+    
+    public void updateDirection(int newDirection)
+    {
+    	transmitMessage(new ChangeDirectionMessage(newDirection));
     }
     
     private void transmitMessage(Object message)

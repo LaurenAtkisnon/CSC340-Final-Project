@@ -42,9 +42,9 @@ public class Grid extends JPanel {
             e.printStackTrace();
         }
     
-        controlledBike = new Bike(25, 75, grid, -1, Bike.DIRECTION_EAST, this);
+        //controlledBike = new Bike(25, 75, grid, -1, Bike.DIRECTION_EAST, this);
 
-        controlledBike.startGame();
+        //controlledBike.startGame();
     }
 
     /*
@@ -59,14 +59,16 @@ public class Grid extends JPanel {
     {
     	this.connector.registerPlayer(Color.BLUE);
     }
-
+    
     public void setPlayerID(int id)
     {
+    	/*
     	if (this.controlledBike == null)
     	{
     		this.startGame(20);
     	}
-    	this.controlledBike.setID(id);
+    	*/
+    	this.controlledBike = new Bike(id, this.connector);
     }
     
     //turns the user bike north

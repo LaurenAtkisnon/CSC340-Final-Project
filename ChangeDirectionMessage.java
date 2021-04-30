@@ -9,14 +9,12 @@ import java.io.Serializable;
  * Server sends to the client their playerID and their name.
  ***************/
 
-public class MovePlayerMessage extends Message implements Serializable {
-    int x;
-    int y;
+public class ChangeDirectionMessage extends Message implements Serializable {
+    int newDirection;
 
-    public MovePlayerMessage(int x, int y)
+    public ChangeDirectionMessage(int newDirection)
     {
-        this.x = x;
-        this.y = y;
+        this.newDirection = newDirection;
     }
     
 }

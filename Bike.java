@@ -19,9 +19,10 @@ public class Bike {
     private Grid grid;
     private NetworkConnector connector; //network
 
-    public Bike(int _xPosition, int _yPosition, int[][] _gridArray, int _player, int initialDirection, Grid _grid){
-        pausePlayer = false;
-    	direction = initialDirection;
+    public Bike(int playerID, NetworkConnector _connector){
+        //pausePlayer = false;
+    	//direction = initialDirection;
+    	/*
         xPosition = _xPosition;
         yPosition = _yPosition;
         gridArray = _gridArray;
@@ -29,28 +30,49 @@ public class Bike {
         gameState = true;
         grid = _grid;
         gridArray[xPosition][yPosition] = player;
-        grid.repaint();
+        //grid.repaint();
+         * */
+    	this.player = playerID;
+    	this.connector = _connector;
+         
     }
     //east directions & cant go backwards
     public void turnWest(){
+    	/*
         if(direction!= DIRECTION_EAST){
             direction = DIRECTION_WEST;
-        } }
+        } 
+        */
+        connector.updateDirection(DIRECTION_WEST);
+       }
+    	
 
     public void turnEast(){
+    	/*
         if(direction != DIRECTION_WEST){
             direction = DIRECTION_EAST;
-        } }
+        }
+        */ 
+    	connector.updateDirection(DIRECTION_EAST);
+        }
 
     public void turnSouth(){
+    	/*
         if(direction != DIRECTION_NORTH){
             direction = DIRECTION_SOUTH;
-        } }
+        } 
+        */
+    		connector.updateDirection(DIRECTION_SOUTH);
+       }
 
     public void turnNorth(){
+    	/*
         if(direction != DIRECTION_SOUTH){
             direction = DIRECTION_NORTH;
         } }
+        */
+    	connector.updateDirection(DIRECTION_NORTH);
+    }
     
     public void stop(){
         gameState = false;
@@ -95,13 +117,14 @@ public class Bike {
     public int getYpos() {
         return yPosition;
     }
+    
     //state the game
     public void startGame(){
         new Thread(new Movement()).start();
     }
 
     //handles the movement of the GUI based on time delay
-
+    
     class Movement implements Runnable {
         /*
         begins movement of the object within the GUI
@@ -150,7 +173,7 @@ public class Bike {
                 */
 
                 // Send the server the bike's new location
-                connector.sendLocation(xPosition, yPosition);
+                //connector.sendLocation(xPosition, yPosition);
 
                 // Show the new location on the grid
                 updateLocation();
@@ -162,4 +185,5 @@ public class Bike {
                 catch(InterruptedException ie){
                     ie.printStackTrace();
                 } } } }
+	
 }

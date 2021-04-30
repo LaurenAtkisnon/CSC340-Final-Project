@@ -10,6 +10,7 @@
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Color;
+import java.awt.Point;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.awt.geom.Rectangle2D;
@@ -22,19 +23,27 @@ public class GameState implements Cloneable, Serializable {
     
     // Inner class: Just a player, with name, color, location, direction, and 
     class Player implements Cloneable, Serializable {
+    	
+        public static final int DIRECTION_NORTH = 0; //north
+        public static final int DIRECTION_EAST = 1; //EAST
+        public static final int DIRECTION_SOUTH = 2; //SOUTH
+        public static final int DIRECTION_WEST = 3; //WEST
+
+    	
         String name;  // Name to display
         Color appearance;  // The appearance of this player and its corresponding lines
         int gridID; //the value of grid coordinates pertaining to this player
-       
+        int direction; //direction that player is moving
         int locx; //current x coordinate of player
         int locy; //current y coordinate of player
         
-        public Player(String n, int _gridID, int initX,  int initY, Color _appearance) {
+        public Player(String n, int _gridID, int initX,  int initY, Color _appearance, int _initialDirection) {
             this.name = n;
             this.locx = initX;
             this.locy = initY;
             this.gridID = _gridID;
             this.appearance = _appearance;
+            this.direction = _initialDirection;
         }
 
         public Object clone() throws CloneNotSupportedException {
@@ -54,6 +63,57 @@ public class GameState implements Cloneable, Serializable {
             this.locx = x;
             this.locy = y;
         }    
+        
+        /**
+         * Moves players by the given direction
+         */
+        public void move()
+        {
+        	 switch(direction) {
+
+             case DIRECTION_NORTH:
+                 if (checkLocation(this.locx, this.locy-1)) {
+                     this.locy --;
+                 } break;
+
+             case DIRECTION_EAST:
+                 if (checkLocation(this.locx +1, this.locy)) {
+                     this.locx ++;
+                 } break;
+
+             case DIRECTION_SOUTH:
+                 if (checkLocation(this.locx, this.locy+1)) {
+                     this.locy++;
+                 } break;
+
+             case DIRECTION_WEST:
+                 if (checkLocation(this.locx-1, this.locy)) {
+                     this.locx --;
+                 } break;
+             }
+        }
+        
+        public void turnWest(){
+            if(direction!= DIRECTION_EAST){
+                direction = DIRECTION_WEST;
+            } }
+
+        public void turnEast(){
+            if(direction != DIRECTION_WEST){
+                direction = DIRECTION_EAST;
+            } }
+
+        public void turnSouth(){
+            if(direction != DIRECTION_NORTH){
+                direction = DIRECTION_SOUTH;
+            } }
+
+        public void turnNorth(){
+            if(direction != DIRECTION_SOUTH){
+                direction = DIRECTION_NORTH;
+            } }
+        
+   
         
          /**
          * Determine any collisions between two groups of Players
@@ -115,21 +175,21 @@ public class GameState implements Cloneable, Serializable {
      * @param color The color of the player
      * @returns The index of this player (in the ArrayList)
      **/
-    public int addPlayer(String name, Color color) {
+    public int addPlayer(String name, Color color, int initialDirection) {
         // Pick an initial location that has not yet been visited
-        Point2D.Double p = starterPos();
+        Point p = starterPos();
         int gridID = player.size() + 1;
-        player.add(new Player(name, gridID, (int)p.x, (int)p.y, color));
+        player.add(new Player(name, gridID, (int)p.getX(), (int)p.getY(), color, initialDirection));
         return player.size()-1;
     }
 
     /**Determines a location on the grid that has yet to be occupied */
-    public Point2D.Double starterPos()
+    public Point starterPos()
     {
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
+        for (int x = GRID_WIDTH / 2; x < GRID_WIDTH; x++) {
+            for (int y = GRID_HEIGHT / 2; y < GRID_HEIGHT; y++) {
               if (grid[x][y] == 0){
-                  return new Point2D.Double(x, y);
+                  return new Point(x, y);
               }
             }
         }
@@ -148,6 +208,39 @@ public class GameState implements Cloneable, Serializable {
         pl.setLocation(x, y);
         //marks new location on grid
         this.grid[x][y] = pl.getGridID();
+    }
+    
+    public void turnWest(int p){
+    	Player pl = player.get(p);  // Get the Player object
+    	 pl.turnWest();
+    }
+
+    public void turnEast(int p){
+    	Player pl = player.get(p);  // Get the Player object
+    	pl.turnEast();
+    }
+
+    public void turnSouth(int p){
+    	Player pl = player.get(p);  // Get the Player object
+    	pl.turnSouth();
+    }
+
+    public void turnNorth(int p){
+    	Player pl = player.get(p);  // Get the Player object
+    	pl.turnNorth();
+     }
+    
+    public void updateGrid()
+    {
+    	for (GameState.Player p : this.getPlayers())
+    	{
+    		this.grid[p.locx][p.locy] = p.gridID;
+    	}
+    }
+    
+    //verify if location is valid
+    public boolean checkLocation(int x, int y) {
+        return x > 0 && x < this.grid.length && y > 0 && y < this.grid[0].length && this.grid[x][y] == 0;
     }
 
     // Returns the list of players.  Probably safer to have some way to iterate through them and the cells

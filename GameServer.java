@@ -90,18 +90,32 @@ public class GameServer implements Runnable {
             {
                 processJoinMessage((JoinMessage) message);
             }
+            /*
             else if (message instanceof MovePlayerMessage) {
                 processMovePlayerMessage((MovePlayerMessage) message);
+            }
+            */
+            else if (message instanceof ChangeDirectionMessage)
+            {
+            	processChangeDirectionMessage((ChangeDirectionMessage) message);
             }
             else
             {
                 debug.println(3, "Unrecognized Message");
             }
         }
-
+        
+        /*
         private void processMovePlayerMessage(MovePlayerMessage message) {
             if (this.playerID == -1) return;
             gameEngine.setPlayerLocation(this.playerID, message.x, message.y);
+        }
+        */
+        
+        private void processChangeDirectionMessage(ChangeDirectionMessage message)
+        {
+        	 if (this.playerID == -1) return;
+        	 gameEngine.changePlayerDirection(this.playerID, message.newDirection);
         }
 
 
@@ -215,7 +229,7 @@ public class GameServer implements Runnable {
     }
 
     public synchronized int addPlayer(String name, Color color) {
-        return gameState.addPlayer(name, color);
+        return gameEngine.addPlayer(name, color);
     }
 
     private void createGameStateTransmitter() {

@@ -12,6 +12,7 @@
  * And is designed to be a simple game to convert to a Networking game.
  ***************/
 import java.util.ArrayList;
+import java.util.Random;
 import java.awt.Color;
 import java.io.*;
 import java.io.IOException;
@@ -62,9 +63,48 @@ public class GameEngine implements Runnable {
         }
         
     }
+    
+    public void turnWest(int p){
+        gameState.turnWest(p);
+    }
+
+    public void turnEast(int p){
+       gameState.turnEast(p);
+    }
+
+    public void turnSouth(int p){
+    	gameState.turnSouth(p);
+    }
+
+    public void turnNorth(int p){
+        gameState.turnNorth(p);
+     }
+
+    public synchronized void changePlayerDirection(int p, int newDirection)
+    {
+    	switch (newDirection)
+    	{
+    		case 0: 
+    			this.turnNorth(p);
+    			break;
+    		case 1:
+    			this.turnEast(p);
+    			break;
+    		case 2:
+    			this.turnSouth(p);
+    			break;
+    		case 3:
+    			this.turnWest(p);
+    			break;
+    			
+    	}
+    }
+    
 
     public synchronized int addPlayer(String name, Color color) {
-        return gameState.addPlayer(name, color);
+    	Random rand = new Random();
+    	int initialDirection = rand.nextInt(4);
+        return gameState.addPlayer(name, color, initialDirection);
     }
 
     /**
@@ -81,6 +121,9 @@ public class GameEngine implements Runnable {
     public void run() {
         while (!gameState.isDone()) {
             debug.println(10, "(GameEngine.run) Executing...");
+            
+            //Move Players
+            movePlayers();
 
             // Detect all collisions
             detectCollisions();
@@ -104,6 +147,20 @@ public class GameEngine implements Runnable {
             p.collisions();  // Compute collisions for this player
 
         }
+    }
+    
+    private synchronized void movePlayers() {
+    	ArrayList<GameState.Player> player = gameState.getPlayers();
+    	int size = player.size();
+        for (int i = 0; i < size; i++) {
+            GameState.Player p = player.get(i);
+            p.move();
+
+        }
+        
+        //next, we need to update the grid to reflect the new position of each player
+        gameState.updateGrid();
+    	
     }
 }
 
