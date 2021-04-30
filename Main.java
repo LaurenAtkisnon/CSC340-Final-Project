@@ -15,6 +15,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
     private Grid gameGrid; // shows the trail on the main GUI
     private String username; // username for chat capabilites
     private String hostname = "127.0.0.1";
+    private Color color = Color.BLUE;
 
     public static void main(String[] args) {
         new Main();
@@ -93,10 +94,11 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         // Get connection info
         hostname = JOptionPane.showInputDialog(null, "Enter the server hostname:");
         username = JOptionPane.showInputDialog(null, "Enter your desired username:");
+        color = JColorChooser.showDialog(Main.this, "Select your color!", Color.BLUE);
         gameGrid.connect(hostname, username);
         // this.establishConnection();
         // "Register" the player with the server
-        gameGrid.registerPlayer();
+        gameGrid.registerPlayer(color);
 
         gameGrid.setFocusable(true);
         gameGrid.addKeyListener(this);

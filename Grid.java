@@ -55,9 +55,9 @@ public class Grid extends JPanel {
         this.connector = new NetworkConnector(hostname, username, this);
     }
     
-    public void registerPlayer()
+    public void registerPlayer(Color color)
     {
-    	this.connector.registerPlayer(Color.BLUE);
+    	this.connector.registerPlayer(color);
     }
     
     public void setPlayerID(int id)
