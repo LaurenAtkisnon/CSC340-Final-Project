@@ -83,6 +83,8 @@ public class GameServer implements Runnable {
             } catch (IOException e) {
                 printMessage("Error trying to close socket. " + e.getMessage());
             }
+            //Inform the server to remove its reference to this connection thread class	
+            removeConnection(this);
         }
 
         /**
@@ -205,6 +207,13 @@ public class GameServer implements Runnable {
         Connection c = new Connection(clientSocket, name);
         connection.add(c);
         c.start(); // Start the thread.
+    }
+    
+    public void removeConnection(Connection c)
+    {
+    	debug.println(3, "Game Server: Removing Connection to client: " + c.name);
+    	gameEngine.removePlayer(c.playerID);
+    	connection.remove(c);
     }
 
     /**

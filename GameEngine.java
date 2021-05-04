@@ -106,6 +106,11 @@ public class GameEngine implements Runnable {
         int initialDirection = rand.nextInt(4);
         return gameState.addPlayer(name, color, initialDirection, this.activeGame);
     }
+    
+    public synchronized void removePlayer(int playerID)
+    {
+    	gameState.removePlayer(playerID);
+    }
 
     /**
      * Set a player p's direction to dx and dy. This moves all cells in that
@@ -187,6 +192,7 @@ public class GameEngine implements Runnable {
 
     private synchronized boolean checkIfGameOver() {
         ArrayList<GameState.Player> players = gameState.getPlayers();
+        int winnerID = -1;
         int size = players.size();
         if (size > 0) {
             int alive = 0;
@@ -194,10 +200,15 @@ public class GameEngine implements Runnable {
                 GameState.Player p = players.get(i);
                 if (!p.dead) {
                     alive++;
+                    winnerID = i;
                 }
             }
             // a multiplayer game ends when there is only one player left standing
             if (size > 1) {
+            	if (alive == 1)
+            	{
+            		gameState.setWinner(winnerID);
+            	}
                 return alive == 1;
             } else {
                 // in single player mode, the game simply ends when the only player dies
@@ -210,6 +221,7 @@ public class GameEngine implements Runnable {
     }
 
     private synchronized void resetGame() {
+    	gameState.setWinner(-1); //clear the winner
         gameState.resetGrid(); // reset the board
         this.keepGoing = true; // reset the enough players to start
         this.activeGame = false; // reset to a non active game until enough players are connected

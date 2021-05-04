@@ -13,12 +13,12 @@ public class Grid extends JPanel {
     private final Color PLAYER2 = Color.RED; //player2
 
     private Bike controlledBike; //player1
-
-
-
+  
     private NetworkConnector connector;
 
     private Color userColor; //color of client bike
+    
+    private boolean displayPopup = false;
 
     //new instance of Grid
     public Grid(){
@@ -50,9 +50,27 @@ public class Grid extends JPanel {
     /*
     GAME SERVER CONNECTION INTITION HERE
      */
-    public void connect(String hostname, String username)
+    public void connect(String hostname, String username, int port)
     {
-        this.connector = new NetworkConnector(hostname, username, this);
+    	if (this.connector == null)
+    	{
+    		this.connector = new NetworkConnector(hostname, username, port, this);
+    	}
+    	else
+    	{
+    		this.connector.retry(hostname, port);
+    	}
+        
+    }
+    
+    public Boolean getConnectStatus()
+    {
+    	return this.connector.getStatus();
+    }
+    
+    public void resetConnectionStatus()
+    {
+    	this.connector.resetStatus();
     }
     
     public void registerPlayer(Color color)
@@ -90,18 +108,38 @@ public class Grid extends JPanel {
         
     //popup saying you won
     public void won(){
-        JOptionPane.showMessageDialog(this, "You Win!");
+    
+    	JOptionPane.showMessageDialog(this, "You Win!");
+    	
     }
 
     //popup message you lost
     public void lost(){
-        JOptionPane.showMessageDialog(this, "You Lost :/");
+    	
+    	JOptionPane.showMessageDialog(this, "You Lost :/");    	
     }
 
     //method communication
 
     public NetworkConnector getConnector() {
         return this.connector;
+    }
+    
+    public void displayWinLose(GameState gs)
+    { 	 
+	  if (this.displayPopup == false)
+	  {
+		if (gs.getWinner() == this.controlledBike.player)
+	  	{
+			this.displayPopup = true;
+	  		this.won();
+	  	}
+	  	else if (gs.getWinner() != -1)
+	  	{
+	  	  	this.displayPopup = true;
+	  		this.lost();
+	  	}
+	  }	
     }
 
     //paints the grid
@@ -157,6 +195,7 @@ public class Grid extends JPanel {
             drawPlayer(p, g);
         }
         */
+      	
     	drawGrid(gameState, g);
     }
     

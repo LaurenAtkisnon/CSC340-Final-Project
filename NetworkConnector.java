@@ -20,6 +20,7 @@ public class NetworkConnector {
     private String hostname;
     private String username;
     private Debug debug;
+    private Boolean status; //represent whether or not a connection has been established with the server
     private int userId =-1;
     private Socket socket;
     private Connection connection = null;
@@ -30,40 +31,72 @@ public class NetworkConnector {
     private GameState gameState;
 
     //creates instance that connects host to the server
-    public NetworkConnector(String hostname, String username, Grid grid){
+    public NetworkConnector(String hostname, String username, int port, Grid grid){
     	this.debug = debug.getInstance();
+    	this.port = port;
         this.username = username;
         this.hostname = hostname;
         this.grid = grid;
 
         //establish connection with the server
-        establishConnection();
+        if(establishConnection())
+        {
+            //startup a thread that received and processes incoming communication from the server
+            Connection connection = new Connection();
+            connection.start();
+        }
 
-        //startup a thread that received and processes incoming communication from the server
-        Connection connection = new Connection();
-        connection.start();
+    
     }
     /*
     feel like there should be a method here that connects the server w the port but
     it feels redundant
      */
 
-    public void establishConnection() {
+    public boolean establishConnection() {
         // Establish connection with the Server
     try{
 	    socket = new Socket(hostname, port);
 	    out = new ObjectOutputStream(socket.getOutputStream());
 	    in = new ObjectInputStream(socket.getInputStream());
+	    this.status = true; //a connection has been established
+	    return true;
     }   
         catch (UnknownHostException e) 
         {
+        this.status = false;
 	    System.out.println("Unknown host: " + hostname);
 	    System.out.println("             " + e.getMessage());
         } 
         catch (IOException e) {
+        	this.status = false;
         	System.out.println("IO Error: Error establishing communication with server.");
         	System.out.println("          " + e.getMessage());
         } 
+    
+    	return false;
+    }
+    
+    public void retry(String hostname, int port)
+    {
+    	this.hostname = hostname;
+    	this.port = port;
+    	//establish connection with the server
+        if(establishConnection())
+        {
+            //startup a thread that received and processes incoming communication from the server
+            Connection connection = new Connection();
+            connection.start();
+        }	
+    }
+    
+    public Boolean getStatus()
+    {
+    	return this.status;
+    }
+    public void resetStatus()
+    {
+    	this.status = null;
     }
     
     void registerPlayer(Color color)
@@ -238,6 +271,7 @@ public class NetworkConnector {
         private void processGameStateMessage(GameState gs)
         {
             gameState = gs;
+            grid.displayWinLose(gs);
         }
 
         /**

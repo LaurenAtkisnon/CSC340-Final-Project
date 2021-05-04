@@ -39,7 +39,7 @@ public class GameState implements Cloneable, Serializable {
         int locy; // current y coordinate of player
 
         public Player(String n, int _gridID, int initX, int initY, Color _appearance, int _initialDirection) {
-            this.name = n;
+        	this.name = n;
             this.locx = initX;
             this.locy = initY;
             this.gridID = _gridID;
@@ -154,6 +154,8 @@ public class GameState implements Cloneable, Serializable {
 
     // The list of Players
     private ArrayList<Player> players;
+    
+    private int winnerID = -1;
 
     private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT]; // keeps track of where each player has been
 
@@ -198,6 +200,11 @@ public class GameState implements Cloneable, Serializable {
         int gridID = players.size() + 1;
         players.add(new Player(name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
         return players.size() - 1;
+    }
+    
+    public void removePlayer(int playerID)
+    {
+    	players.remove(playerID);
     }
 
     /** Determines a location on the grid that has yet to be occupied */
@@ -297,6 +304,16 @@ public class GameState implements Cloneable, Serializable {
     // a local copy of the GameState anyway!
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+    
+    public void setWinner(int id)
+    {
+    	this.winnerID = id;
+    }
+    
+    public int getWinner()
+    {
+    	return this.winnerID;
     }
 
     // Returns the grid containing the history of where each player has been
