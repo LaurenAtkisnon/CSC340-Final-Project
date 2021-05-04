@@ -33,7 +33,7 @@ Timothy:
 Ryan: 
 * Allows for any number of connections.
 * Players spawn at random locations.
-* players will be spectators if the game is already started.
+* Players will be spectators if the game is already started.
 * Game resets 10 sec after game over.
   * Spectators then become players.
 * Created README.md
