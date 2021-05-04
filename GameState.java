@@ -193,9 +193,14 @@ public class GameState implements Cloneable, Serializable {
      * @param color The color of the player
      * @returns The index of this player (in the ArrayList)
      **/
-    public int addPlayer(String name, Color color, int initialDirection) {
+    public int addPlayer(String name, Color color, int initialDirection, boolean activeGame) {
         // Pick an initial location that has not yet been visited
-        Point p = starterPos();
+        Point p = null;
+        if (activeGame) {
+            p = new Point(GRID_WIDTH + 10, GRID_HEIGHT + 10);
+        } else {
+            p = starterPos();
+        }
         int gridID = players.size() + 1;
         players.add(new Player(name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
         return players.size() - 1;
@@ -266,6 +271,9 @@ public class GameState implements Cloneable, Serializable {
     }
 
     public boolean lineCollisionCheck(int x, int y) {
+        if (x > GRID_WIDTH && y > GRID_HEIGHT) {
+            return false;
+        }
         return this.grid[x][y] == 0;
     }
 

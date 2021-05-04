@@ -22,7 +22,7 @@ import java.io.*;
 public class GameServer implements Runnable {
     GameState gameState;
     GameEngine gameEngine;
-    public static final int GAME_STATE_REFRESH = 75; // Set to 500 for slower speeds, good for debugging
+    public static final int GAME_STATE_REFRESH = 500; // Set to 500 for slower speeds, good for debugging
     Debug debug;
     HashSet<Connection> connection; // The set of client connections
 

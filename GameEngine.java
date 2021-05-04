@@ -24,7 +24,7 @@ public class GameEngine implements Runnable {
     boolean activeGame;
     boolean done;
     boolean keepGoing;
-    public static final int NUM_PLAYERS_BEFORE_START = 4;
+    public static final int NUM_PLAYERS_BEFORE_START = 2;
 
     public GameEngine() {
         this.activeGame = false;
@@ -104,7 +104,7 @@ public class GameEngine implements Runnable {
     public synchronized int addPlayer(String name, Color color) {
         Random rand = new Random();
         int initialDirection = rand.nextInt(4);
-        return gameState.addPlayer(name, color, initialDirection);
+        return gameState.addPlayer(name, color, initialDirection, this.activeGame);
     }
 
     /**
