@@ -99,10 +99,10 @@ public class NetworkConnector {
     	this.status = null;
     }
     
-    void registerPlayer(Color color)
+    void registerPlayer(Color color, Boolean playMode)
     {
     	//System.out.println("Let's ask the server if we can join the game.");
-        JoinMessage message = new JoinMessage(this.username, color);
+        JoinMessage message = new JoinMessage(this.username, color, playMode);
         transmitMessage(message);
         
     } 
@@ -265,7 +265,10 @@ public class NetworkConnector {
 
         private void processJoinResponseMessage(JoinResponseMessage message) {
             username = message.name;
-            grid.setPlayerID(message.playerID);
+            if (message.playerID >= 0)
+            {
+                grid.setPlayerID(message.playerID);
+            }
         }
 
         private void processGameStateMessage(GameState gs)

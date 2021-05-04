@@ -15,11 +15,13 @@ import java.awt.Color;
 public class JoinMessage extends Message implements Serializable {
     String name; // the name the client wishes to use
     Color color; // the color that the client would like to use
+    Boolean playMode; //true if the user would like to be a player
 
-    public JoinMessage(String name, Color color)
+    public JoinMessage(String name, Color color, Boolean playMode)
     {
         this.name = name;
         this.color = color;
+        this.playMode = playMode;
     }
     
 }

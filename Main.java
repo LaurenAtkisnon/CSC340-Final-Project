@@ -103,7 +103,6 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         	port = GameServer.DEFAULT_PORT;
         }
         username = JOptionPane.showInputDialog(null, "Enter your desired username:");
-        color = JColorChooser.showDialog(Main.this, "Select your color!", Color.BLUE);
         gameGrid.connect(hostname, username, port);
         while(gameGrid.getConnectStatus() != true)
         {
@@ -123,9 +122,27 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         		gameGrid.connect(hostname, username, port);
         	}
         }
-        // this.establishConnection();
+        
+        String[] values = {"Player", "Spectator"};
+        Boolean playerMode = true;
+        
+        Object selected = JOptionPane.showInputDialog(null, "Choose the Mode:", "Selection", JOptionPane.DEFAULT_OPTION, null, values, "Player");
+        if (selected != null)
+        {
+        	String selectedOption = selected.toString();
+        	
+        	if (selectedOption == "Spectator")
+        	{
+        		playerMode = false;
+        	}
+        }
+        if (playerMode)
+        {
+        	 color = JColorChooser.showDialog(Main.this, "Select your color!", Color.BLUE);
+        }
+
         // "Register" the player with the server
-        gameGrid.registerPlayer(color);
+        gameGrid.registerPlayer(color, playerMode);
 
         gameGrid.setFocusable(true);
         gameGrid.addKeyListener(this);
@@ -148,7 +165,9 @@ public class Main extends JFrame implements KeyListener, MouseListener {
      */
     @Override
     public void keyPressed(KeyEvent ke) {
-        switch (ke.getKeyCode()) {
+    	if (gameGrid.getPlayerStatus())
+    	{
+    		switch (ke.getKeyCode()) {
             case KeyEvent.VK_RIGHT:
                 gameGrid.turnEast();
                 break;
@@ -180,6 +199,8 @@ public class Main extends JFrame implements KeyListener, MouseListener {
              */
             default:
                 break;
+    		}
+        
         }
     }
 

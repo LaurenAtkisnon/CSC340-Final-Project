@@ -201,7 +201,7 @@ public class GameState implements Cloneable, Serializable {
         players.add(new Player(name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
         return players.size() - 1;
     }
-    
+        
     public void removePlayer(int playerID)
     {
     	players.remove(playerID);

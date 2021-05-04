@@ -36,6 +36,7 @@ public class GameServer implements Runnable {
         boolean done;
         String name; // Name of the player
         Color color; // Color of player
+        boolean playMode; //whether connection corresponds to a player or spectator
         int playerID; // the ID of the player;
 
         /**
@@ -125,8 +126,19 @@ public class GameServer implements Runnable {
         private void processJoinMessage(JoinMessage message) {
             this.name = message.name;
             this.color = message.color;
-            this.playerID = gameEngine.addPlayer(name, color);
-            debug.println(3, "Player " + this.name + " is registered with id = " + this.playerID);
+ 
+            if (message.playMode)
+            {
+            	this.playerID = gameEngine.addPlayer(name, color);
+            	debug.println(3, "Player " + this.name + " is registered with id = " + this.playerID);
+            }
+            else {
+            	this.playMode = false;
+            	this.playerID = -2;
+            	debug.println(3, "Spectator " + this.name + " is registered with id = " + this.playerID);
+            }
+            
+            
             transmitMessage(new JoinResponseMessage(this.name, this.playerID));
 
         }
@@ -212,7 +224,10 @@ public class GameServer implements Runnable {
     public void removeConnection(Connection c)
     {
     	debug.println(3, "Game Server: Removing Connection to client: " + c.name);
-    	gameEngine.removePlayer(c.playerID);
+    	if (c.playMode)
+    	{
+    		gameEngine.removePlayer(c.playerID);
+    	}
     	connection.remove(c);
     }
 

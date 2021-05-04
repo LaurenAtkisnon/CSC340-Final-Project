@@ -107,6 +107,7 @@ public class GameEngine implements Runnable {
         return gameState.addPlayer(name, color, initialDirection, this.activeGame);
     }
     
+    
     public synchronized void removePlayer(int playerID)
     {
     	gameState.removePlayer(playerID);

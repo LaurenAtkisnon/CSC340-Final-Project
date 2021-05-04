@@ -73,9 +73,9 @@ public class Grid extends JPanel {
     	this.connector.resetStatus();
     }
     
-    public void registerPlayer(Color color)
+    public void registerPlayer(Color color, Boolean playMode)
     {
-    	this.connector.registerPlayer(color);
+    	this.connector.registerPlayer(color, playMode);
     }
     
     public void setPlayerID(int id)
@@ -87,6 +87,11 @@ public class Grid extends JPanel {
     	}
     	*/
     	this.controlledBike = new Bike(id, this.connector);
+    }
+    
+    public Boolean getPlayerStatus()
+    {
+    	return this.controlledBike != null;
     }
     
     //turns the user bike north
@@ -126,20 +131,24 @@ public class Grid extends JPanel {
     }
     
     public void displayWinLose(GameState gs)
-    { 	 
-	  if (this.displayPopup == false)
-	  {
-		if (gs.getWinner() == this.controlledBike.player)
-	  	{
-			this.displayPopup = true;
-	  		this.won();
-	  	}
-	  	else if (gs.getWinner() != -1)
-	  	{
-	  	  	this.displayPopup = true;
-	  		this.lost();
-	  	}
-	  }	
+    {
+      if (this.controlledBike != null)
+      {
+    	  if (this.displayPopup == false)
+    	  {
+    		if (gs.getWinner() == this.controlledBike.player)
+    	  	{
+    			this.displayPopup = true;
+    	  		this.won();
+    	  	}
+    	  	else if (gs.getWinner() != -1)
+    	  	{
+    	  	  	this.displayPopup = true;
+    	  		this.lost();
+    	  	}
+    	  }	
+      }
+	 
     }
 
     //paints the grid
