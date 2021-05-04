@@ -24,21 +24,21 @@ Charles:
 
 Timothy:
 * Allows for any number of connections.
-* Currently a minimum of 4 players is needed to start
+* Currently a minimum of 4 players is needed to start.
 * Players spawn at random locations.
 * Players will be spectators if the game is already started.
 * Game resets 10 sec after game over.
   * Spectators then become players.
-* WASD support
+* WASD support.
 
 Ryan: 
 * Allows for any number of connections.
-* Currently a minimum of 4 players is needed to start
+* Currently a minimum of 4 players is needed to start.
 * Players spawn at random locations.
 * Players will be spectators if the game is already started.
 * Game resets 10 sec after game over.
   * Spectators then become players.
-* Created README.md
+* Created README.md.
 
 Griffin:
 
