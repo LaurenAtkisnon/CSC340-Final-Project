@@ -2,7 +2,7 @@
 /***********
  * Game State
  * Author: Christian Duncan
- * Modified By: Charles Rescanski
+ * Modified By: Charles Rescanski, Timothy Carta, Ryan Hayes
  *
  * This application stores the state of the game.
  *   It includes a list of players
@@ -160,13 +160,7 @@ public class GameState implements Cloneable, Serializable {
     public GameState() {
         players = new ArrayList<Player>();
 
-        // set everything to 0
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                this.grid[x][y] = 0;
-            }
-        }
-
+        resetGrid();
     }
 
     public Object clone() throws CloneNotSupportedException {
@@ -221,6 +215,18 @@ public class GameState implements Cloneable, Serializable {
         return new Point(x, y);
     }
 
+    /*
+     * Go through each player and reset their death, position
+     */
+    public void resetPlayers() {
+        Point startPos = null;
+        for (GameState.Player p : this.getPlayers()) {
+            p.dead = false;
+            startPos = starterPos();
+            p.setLocation((int) startPos.getX(), (int) startPos.getY());
+        }
+    }
+
     /**
      * Set a player p's direction to dx and dy. This moves all cells in that
      * direction
@@ -261,7 +267,15 @@ public class GameState implements Cloneable, Serializable {
             if (!p.dead) {
                 this.grid[p.locx][p.locy] = p.gridID;
             }
+        }
+    }
 
+    public void resetGrid() {
+        // set everything to 0
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = 0; y < GRID_HEIGHT; y++) {
+                this.grid[x][y] = 0;
+            }
         }
     }
 
