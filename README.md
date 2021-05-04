@@ -25,7 +25,7 @@ Charles:
 Timothy:
 * Allows for any number of connections.
 * Players spawn at random locations.
-* Spectators if the game is already started.
+* Players will be spectators if the game is already started.
 * Game resets 10 sec after game over.
   * Spectators then become players.
 * WASD support
@@ -33,7 +33,7 @@ Timothy:
 Ryan: 
 * Allows for any number of connections.
 * Players spawn at random locations.
-* Spectators if the game is already started.
+* players will be spectators if the game is already started.
 * Game resets 10 sec after game over.
   * Spectators then become players.
 * Created README.md
