@@ -1,7 +1,5 @@
 # Tron.io
 
----
-
 This project is a simple network game using the client-server model.
 The game itself is based on Tron, where several players will compete
 against one another and try to be the last one standing.
