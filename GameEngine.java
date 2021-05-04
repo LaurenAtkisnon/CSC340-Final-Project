@@ -24,7 +24,7 @@ public class GameEngine implements Runnable {
     boolean activeGame;
     boolean done;
     boolean keepGoing;
-    public static final int NUM_PLAYERS_BEFORE_START = 4;
+    public static final int NUM_PLAYERS_BEFORE_START = 2;
 
     public GameEngine() {
         this.activeGame = false;
@@ -104,7 +104,7 @@ public class GameEngine implements Runnable {
     public synchronized int addPlayer(String name, Color color) {
         Random rand = new Random();
         int initialDirection = rand.nextInt(4);
-        return gameState.addPlayer(name, color, initialDirection);
+        return gameState.addPlayer(name, color, initialDirection, this.activeGame);
     }
 
     /**
@@ -140,7 +140,12 @@ public class GameEngine implements Runnable {
                 if (checkIfGameOver()) {
                     this.activeGame = false;
                     keepGoing = false;
-                    // gameState.endCurrentGame();
+                    try {
+                        Thread.sleep(10000);
+                        this.resetGame();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -152,25 +157,25 @@ public class GameEngine implements Runnable {
     }
 
     private synchronized void detectCollisions() {
-        ArrayList<GameState.Player> player = gameState.getPlayers();
+        ArrayList<GameState.Player> players = gameState.getPlayers();
 
         // Each player cannot cross any line (including its own).
         // For each player, we need to check whether their current location intersects
         // with a previously visited location or the wall of the arena.
         // If so, the player must be removed from the game
-        int size = player.size();
+        int size = players.size();
         for (int i = 0; i < size; i++) {
-            GameState.Player p = player.get(i);
+            GameState.Player p = players.get(i);
             p.collisions(); // Compute collisions for this player
 
         }
     }
 
     private synchronized void movePlayers() {
-        ArrayList<GameState.Player> player = gameState.getPlayers();
-        int size = player.size();
+        ArrayList<GameState.Player> players = gameState.getPlayers();
+        int size = players.size();
         for (int i = 0; i < size; i++) {
-            GameState.Player p = player.get(i);
+            GameState.Player p = players.get(i);
             p.move();
 
         }
@@ -181,12 +186,12 @@ public class GameEngine implements Runnable {
     }
 
     private synchronized boolean checkIfGameOver() {
-        ArrayList<GameState.Player> player = gameState.getPlayers();
-        int size = player.size();
+        ArrayList<GameState.Player> players = gameState.getPlayers();
+        int size = players.size();
         if (size > 0) {
             int alive = 0;
             for (int i = 0; i < size; i++) {
-                GameState.Player p = player.get(i);
+                GameState.Player p = players.get(i);
                 if (!p.dead) {
                     alive++;
                 }
@@ -202,5 +207,12 @@ public class GameEngine implements Runnable {
 
         return false;
 
+    }
+
+    private synchronized void resetGame() {
+        gameState.resetGrid(); // reset the board
+        this.keepGoing = true; // reset the enough players to start
+        this.activeGame = false; // reset to a non active game until enough players are connected
+        gameState.resetPlayers();
     }
 }

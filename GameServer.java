@@ -4,7 +4,7 @@
  * Author: Christian Duncan
  * Spring 21: CSC340
  * 
- * Modified by: Charles Rescsanski
+ * Modified by: Charles Rescsanski, Timothy Carta, Ryan Hayes
  * 
  * This is a stand-alone application with the following functions:
  *  1. Listen for connections on a port.
@@ -22,7 +22,7 @@ import java.io.*;
 public class GameServer implements Runnable {
     GameState gameState;
     GameEngine gameEngine;
-    public static final int GAME_STATE_REFRESH = 75; // Set to 500 for slower speeds, good for debugging
+    public static final int GAME_STATE_REFRESH = 100; // Set to 500 for slower speeds, good for debugging
     Debug debug;
     HashSet<Connection> connection; // The set of client connections
 

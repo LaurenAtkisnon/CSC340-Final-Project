@@ -2,7 +2,7 @@
 /***********
  * Game State
  * Author: Christian Duncan
- * Modified By: Charles Rescanski
+ * Modified By: Charles Rescanski, Timothy Carta, Ryan Hayes
  *
  * This application stores the state of the game.
  *   It includes a list of players
@@ -160,13 +160,7 @@ public class GameState implements Cloneable, Serializable {
     public GameState() {
         players = new ArrayList<Player>();
 
-        // set everything to 0
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                this.grid[x][y] = 0;
-            }
-        }
-
+        resetGrid();
     }
 
     public Object clone() throws CloneNotSupportedException {
@@ -193,9 +187,14 @@ public class GameState implements Cloneable, Serializable {
      * @param color The color of the player
      * @returns The index of this player (in the ArrayList)
      **/
-    public int addPlayer(String name, Color color, int initialDirection) {
+    public int addPlayer(String name, Color color, int initialDirection, boolean activeGame) {
         // Pick an initial location that has not yet been visited
-        Point p = starterPos();
+        Point p = null;
+        if (activeGame) {
+            p = new Point(GRID_WIDTH + 10, GRID_HEIGHT + 10);
+        } else {
+            p = starterPos();
+        }
         int gridID = players.size() + 1;
         players.add(new Player(name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
         return players.size() - 1;
@@ -214,6 +213,18 @@ public class GameState implements Cloneable, Serializable {
             }
         }
         return new Point(x, y);
+    }
+
+    /*
+     * Go through each player and reset their death, position
+     */
+    public void resetPlayers() {
+        Point startPos = null;
+        for (GameState.Player p : this.getPlayers()) {
+            p.dead = false;
+            startPos = starterPos();
+            p.setLocation((int) startPos.getX(), (int) startPos.getY());
+        }
     }
 
     /**
@@ -256,7 +267,15 @@ public class GameState implements Cloneable, Serializable {
             if (!p.dead) {
                 this.grid[p.locx][p.locy] = p.gridID;
             }
+        }
+    }
 
+    public void resetGrid() {
+        // set everything to 0
+        for (int x = 0; x < GRID_WIDTH; x++) {
+            for (int y = 0; y < GRID_HEIGHT; y++) {
+                this.grid[x][y] = 0;
+            }
         }
     }
 
@@ -266,6 +285,9 @@ public class GameState implements Cloneable, Serializable {
     }
 
     public boolean lineCollisionCheck(int x, int y) {
+        if (x > GRID_WIDTH && y > GRID_HEIGHT) {
+            return false;
+        }
         return this.grid[x][y] == 0;
     }
 
