@@ -137,7 +137,7 @@ public class GameEngine implements Runnable {
             if (gameState.getPlayers().size() >= NUM_PLAYERS_BEFORE_START && keepGoing) {
                 startGame();
             }
-
+           
             if (this.activeGame) {
                 // Move Players
                 movePlayers();

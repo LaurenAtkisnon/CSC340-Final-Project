@@ -1,4 +1,6 @@
 import javax.swing.*;
+
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -220,9 +222,15 @@ public class Grid extends JPanel {
      
      //Draw the Grid with the players
      private void drawGrid(GameState gameState, Graphics2D g) {
+    	 //draw the names of players
+    	 for (GameState.Player p: gameState.getPlayers()) { 
+    		 g.setColor(Color.BLACK);
+             g.setFont(new Font("Serif", Font.BOLD, 18));
+             g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
+         }
     	 for (int x = 0; x < GRID_WIDTH; x++) {
     		 int[][] grid = gameState.getGrid();
-    		 
+  
              for (int y = 0; y <GRID_HEIGHT; y++) {
                if (grid[x][y] != 0){
             	   for (GameState.Player p: gameState.getPlayers()) {
@@ -239,4 +247,6 @@ public class Grid extends JPanel {
              }
          }
      }
+     
+     
 }
