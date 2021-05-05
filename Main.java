@@ -1,3 +1,10 @@
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ *
+ * Main game GUI  
+ ***************/
+
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;

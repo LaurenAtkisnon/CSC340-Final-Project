@@ -1,3 +1,10 @@
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ *
+ * Grid class -- drawss the grid and keeps track of the players on the game 
+ ***************/
+
 import javax.swing.*;
 import java.awt.*;
 
