@@ -1,7 +1,10 @@
-/*
-connects client to the server -- processes the commands between the client and the server
-also creats threads
- */
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ *
+ * connects client to the server -- processes the commands between the client and the server
+ * also creats threads
+ ***************/
 
 import javax.swing.*;
 import java.io.*;
@@ -110,6 +113,6 @@ private void startGame(String value){
     method for listener class (if making one) waits for the data to be
     received from the server & itll just run
     doesnt get calles directly & is ran as a seperate thread
-    so just parse commands 
+    so just parse commands
      */
 }

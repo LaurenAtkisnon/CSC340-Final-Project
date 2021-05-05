@@ -1,3 +1,13 @@
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ *
+ * Bike Class handles the movement of the bike and makes sure that the player
+ * is on the grid at all times
+ ***************/
+
+
+
 import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 

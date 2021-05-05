@@ -1,3 +1,11 @@
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ *
+ * Chat feature
+ *
+ ***************/
+
 import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
