@@ -19,8 +19,8 @@ import java.awt.geom.Point2D;
 
 public class GameState implements Cloneable, Serializable {
     public static final long serialVersionUID = 340L;
-    public static final int GRID_HEIGHT = 100; // height
-    public static final int GRID_WIDTH = 100; // width
+    public static final int GRID_HEIGHT = 125; // height
+    public static final int GRID_WIDTH = 175; // width
 
     // Inner class: Just a player, with name, color, location, direction, and
     class Player implements Cloneable, Serializable {

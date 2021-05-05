@@ -5,8 +5,8 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Grid extends JPanel {
-    private final int GRID_HEIGHT = 100; //height for calculating the size of GUI
-    private final int GRID_WIDTH = 100; //width
+    private final int GRID_HEIGHT = 125; //height for calculating the size of GUI
+    private final int GRID_WIDTH = 175; //width
 
     private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT]; //keeps track of where player has gone on board
     private final int WIDTH = GRID_WIDTH * 5; //pixels of width

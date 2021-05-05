@@ -11,6 +11,8 @@ public class Main extends JFrame implements KeyListener, MouseListener {
     private final String GAME_VERSION = "0.1";
     private JMenuItem Exit; // exit button
     private JMenuItem About; // about button
+    private JMenuItem serverPort; //for changing server Port
+    private JMenuItem serverIP; //for changing server ip
     private JMenuItem Credit; // creidts
     private Grid gameGrid; // shows the trail on the main GUI
     private String username; // username for chat capabilites
@@ -27,17 +29,22 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         JMenuBar menuBar = new JMenuBar();
         JMenu jmFile = new JMenu("File");
         Exit = new JMenuItem("Exit");
+        serverPort = new JMenuItem("Change Server Port");
+        serverIP = new JMenuItem("Change Server IP");
+        jmFile.add(serverPort);
+        jmFile.add(serverIP);
         jmFile.add(Exit);
         menuBar.add(jmFile);
         JMenu jmHelp = new JMenu("Help");
         About = new JMenuItem("About");
         jmHelp.add(About);
+        
         Credit = new JMenuItem("Credit");
         jmHelp.add(Credit);
         menuBar.add(jmHelp);
         setJMenuBar(menuBar);
 
-        // chat
+        /* chat
         JPanel chatFrame = new JPanel(new BorderLayout());
         JTextArea chat = new JTextArea(25, 60);
         chat.setLineWrap(true);
@@ -54,6 +61,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         add(chatFrame, BorderLayout.EAST);
         chatFrame.add(chatScroll, BorderLayout.CENTER);
         chatFrame.add(msg, BorderLayout.SOUTH);
+        */
 
         // grid for game
         gameGrid = new Grid();
@@ -78,9 +86,31 @@ public class Main extends JFrame implements KeyListener, MouseListener {
             } else if (choice == Credit) {
                 JOptionPane.showMessageDialog(null, "LightBikes v" + GAME_VERSION + "\n" + "Created in May 2021.\n\n"
                         + "DEVELOPERS:\n" + "L.Atkinson\n" + "T.Carta\n" + "R.Hayes\n" + "C.Rescsanki");
+            } else if (choice == serverPort)
+            {
+            	String portName = JOptionPane.showInputDialog("Please enter a server PORT.\nThis only takes effect after the next connection attempt.\nCurrent port: " + port);
+                if (portName != null && portName.length() > 0) {
+                    try {
+                        int p = Integer.parseInt(portName);
+                        if (p < 0 || p > 65535) {
+                            JOptionPane.showMessageDialog(null, "The port [" + portName + "] must be in the range 0 to 65535.", "Invalid Port Number", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            port = p;  // Valid.  Update the port
+                        }
+                    } catch (NumberFormatException ignore) {
+                        JOptionPane.showMessageDialog(null, "The port [" + portName + "] must be an integer.", "Number Format Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else if (choice == serverIP)
+            {
+            	 String newHostName = JOptionPane.showInputDialog("Please enter a server IP/Hostname.\nThis only takes effect after the next connection attempt.\nCurrent server address: " + hostname);
+                 if (newHostName != null && newHostName.length() > 0)
+                     hostname = newHostName;
             }
         };
 
+        serverIP.addActionListener(menuListener);
+        serverPort.addActionListener(menuListener);
         Exit.addActionListener(menuListener);
         About.addActionListener(menuListener);
         Credit.addActionListener(menuListener);
@@ -92,16 +122,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         setResizable(false);
         setVisible(true);
 
-        // Get connection info
-        hostname = JOptionPane.showInputDialog(null, "Enter the server hostname:");
-        try 
-        {
-        	port = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the server port:"));
-    	}
-        catch (NumberFormatException e)
-        {
-        	port = GameServer.DEFAULT_PORT;
-        }
+       
         username = JOptionPane.showInputDialog(null, "Enter your desired username:");
         gameGrid.connect(hostname, username, port);
         while(gameGrid.getConnectStatus() != true)
