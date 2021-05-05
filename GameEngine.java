@@ -127,6 +127,7 @@ public class GameEngine implements Runnable {
 
     public synchronized void startGame() {
         activeGame = true;
+        gameState.setGameActivity(true);
     }
 
     public void run() {
@@ -145,6 +146,7 @@ public class GameEngine implements Runnable {
                 // Check if game is over
                 if (checkIfGameOver()) {
                     this.activeGame = false;
+                    gameState.setGameActivity(false);
                     keepGoing = false;
                     try {
                         Thread.sleep(10000);

@@ -206,8 +206,25 @@ public class Grid extends JPanel {
             drawPlayer(p, g);
         }
         */
-      	
-    	drawGrid(gameState, g);
+      	if (gameState.getGameActivity())
+      	{
+      		drawGrid(gameState, g);
+      	}
+      	else
+      	{
+      		 g.setColor(Color.BLACK);
+             g.setFont(new Font("Serif", Font.BOLD, 28));
+             if (gameState.getPlayers().size() < 2)
+             {
+            	 g.drawString("Please wait for more players to join.", WIDTH/2 - WIDTH/4, HEIGHT/2);
+             }
+             else
+             {
+            	 g.drawString("The next round will commence shortly.", WIDTH/2 - WIDTH/4, HEIGHT/2);
+             }
+             
+      	}
+    	
     }
     
     /*
@@ -226,7 +243,10 @@ public class Grid extends JPanel {
     	 for (GameState.Player p: gameState.getPlayers()) { 
     		 g.setColor(Color.BLACK);
              g.setFont(new Font("Serif", Font.BOLD, 18));
-             g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
+             if (p.getName() != null)
+             {
+            	 g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
+             }   
          }
     	 for (int x = 0; x < GRID_WIDTH; x++) {
     		 int[][] grid = gameState.getGrid();

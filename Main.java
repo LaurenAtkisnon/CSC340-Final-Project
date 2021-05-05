@@ -43,6 +43,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         jmHelp.add(Credit);
         menuBar.add(jmHelp);
         setJMenuBar(menuBar);
+        
 
         /* chat
         JPanel chatFrame = new JPanel(new BorderLayout());

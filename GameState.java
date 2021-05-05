@@ -33,13 +33,15 @@ public class GameState implements Cloneable, Serializable {
         boolean dead = false;
         String name; // Name to display
         Color appearance; // The appearance of this player and its corresponding lines
+        int playerID;
         int gridID; // the value of grid coordinates pertaining to this player
         int direction; // direction that player is moving
         int locx; // current x coordinate of player
         int locy; // current y coordinate of player
 
-        public Player(String n, int _gridID, int initX, int initY, Color _appearance, int _initialDirection) {
+        public Player(int playerID, String n, int _gridID, int initX, int initY, Color _appearance, int _initialDirection) {
         	this.name = n;
+        	this.playerID = playerID;
             this.locx = initX;
             this.locy = initY;
             this.gridID = _gridID;
@@ -156,6 +158,8 @@ public class GameState implements Cloneable, Serializable {
     private ArrayList<Player> players;
     
     private int winnerID = -1;
+    
+    private boolean activeGame = false;
 
     private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT]; // keeps track of where each player has been
 
@@ -198,13 +202,14 @@ public class GameState implements Cloneable, Serializable {
             p = starterPos();
         }
         int gridID = players.size() + 1;
-        players.add(new Player(name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
+        int playerID = players.size();
+        players.add(new Player(playerID, name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
         return players.size() - 1;
     }
         
-    public void removePlayer(int playerID)
+    public void removePlayer(int iD)
     {
-    	players.remove(playerID);
+    	players.removeIf(p -> (p.playerID == iD));
     }
 
     /** Determines a location on the grid that has yet to be occupied */
@@ -232,6 +237,15 @@ public class GameState implements Cloneable, Serializable {
             startPos = starterPos();
             p.setLocation((int) startPos.getX(), (int) startPos.getY());
         }
+    }
+    
+    public void setGameActivity(boolean status) {
+    	this.activeGame = status;
+    }
+    
+    public boolean getGameActivity()
+    {
+    	return this.activeGame;
     }
 
     /**

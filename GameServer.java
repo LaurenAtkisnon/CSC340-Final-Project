@@ -46,6 +46,7 @@ public class GameServer implements Runnable {
          * @param name   The "name" of this connection - for debugging purposes
          **/
         public Connection(Socket socket, String name) {
+        	this.playMode = true;
             this.socket = socket;
             done = false;
             this.name = name;
