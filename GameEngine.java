@@ -184,8 +184,10 @@ public class GameEngine implements Runnable {
         int size = players.size();
         for (int i = 0; i < size; i++) {
             GameState.Player p = players.get(i);
-            p.move();
-
+            if (!p.dead)
+            {
+            	p.move();
+            } 
         }
 
         // next, we need to update the grid to reflect the new position of each player

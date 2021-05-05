@@ -329,6 +329,18 @@ public class GameState implements Cloneable, Serializable {
     {
     	return this.winnerID;
     }
+    
+    public String getWinnerName()
+    {
+    	for (Player p : this.getPlayers())
+    	{
+    		if (p.playerID == this.winnerID)
+    		{
+    			return p.name;
+    		}
+    	}
+    	return null;
+    }
 
     // Returns the grid containing the history of where each player has been
     public int[][] getGrid() {

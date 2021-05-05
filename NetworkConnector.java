@@ -119,6 +119,11 @@ public class NetworkConnector {
     	transmitMessage(new ChangeDirectionMessage(newDirection));
     }
     
+    public String getUserName()
+    {
+    	return this.username;
+    }
+    
     private void transmitMessage(Object message)
     {
         try{
@@ -274,7 +279,13 @@ public class NetworkConnector {
         private void processGameStateMessage(GameState gs)
         {
             gameState = gs;
-            grid.displayWinLose(gs);
+            if (!gs.getGameActivity())
+            {
+            	grid.displayWinLose(gs);
+            }
+            else {
+            	grid.clearMessage();
+            }
         }
 
         /**

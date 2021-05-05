@@ -15,16 +15,20 @@ public class Grid extends JPanel {
     private final Color PLAYER2 = Color.RED; //player2
 
     private Bike controlledBike; //player1
-  
+    private JLabel text;
+    private JLabel info;
     private NetworkConnector connector;
 
     private Color userColor; //color of client bike
     
-    private boolean displayPopup = false;
-
     //new instance of Grid
     public Grid(){
         //plus one to assure the edge
+    	text = new JLabel();
+    	text.setFont(new Font("Verdana", Font.BOLD, 30));
+    	info = new JLabel();
+    	this.add(text, BorderLayout.SOUTH);
+    	this.add(info, BorderLayout.SOUTH);
         setPreferredSize(new Dimension(WIDTH + 1, HEIGHT + 1));
 
         //set everything to 0
@@ -82,12 +86,6 @@ public class Grid extends JPanel {
     
     public void setPlayerID(int id)
     {
-    	/*
-    	if (this.controlledBike == null)
-    	{
-    		this.startGame(20);
-    	}
-    	*/
     	this.controlledBike = new Bike(id, this.connector);
     }
     
@@ -115,15 +113,22 @@ public class Grid extends JPanel {
         
     //popup saying you won
     public void won(){
-    
-    	JOptionPane.showMessageDialog(this, "You Win!");
+    	text.setForeground(Color.BLUE);
+    	text.setText("Congratuations " + this.connector.getUserName() + "! You Win!");
+    	//JOptionPane.showMessageDialog(this, "You Win!");
     	
     }
 
     //popup message you lost
-    public void lost(){
+    public void lost(String winner){
     	
-    	JOptionPane.showMessageDialog(this, "You Lost :/");    	
+    	text.setForeground(Color.RED);
+    	text.setText("You Lost :/ " + winner + " wins this round.");
+    	//JOptionPane.showMessageDialog(this, "You Lost :/");    	
+    }
+    
+    public void clearMessage() {
+    	text.setText(null);
     }
 
     //method communication
@@ -136,21 +141,16 @@ public class Grid extends JPanel {
     {
       if (this.controlledBike != null)
       {
-    	  if (this.displayPopup == false)
-    	  {
+    	 
     		if (gs.getWinner() == this.controlledBike.player)
     	  	{
-    			this.displayPopup = true;
     	  		this.won();
     	  	}
     	  	else if (gs.getWinner() != -1)
     	  	{
-    	  	  	this.displayPopup = true;
-    	  		this.lost();
+    	  		this.lost(gs.getWinnerName());
     	  	}
-    	  }	
-      }
-	 
+    	 }	
     }
 
     //paints the grid
@@ -241,10 +241,16 @@ public class Grid extends JPanel {
      private void drawGrid(GameState gameState, Graphics2D g) {
     	 //draw the names of players
     	 for (GameState.Player p: gameState.getPlayers()) { 
-    		 g.setColor(Color.BLACK);
-             g.setFont(new Font("Serif", Font.BOLD, 18));
+    		 g.setColor(Color.DARK_GRAY);
+             g.setFont(new Font("Serif", Font.BOLD, 15));
              if (p.getName() != null)
              {
+            	 //make it clear which player belongs to this client
+            	 if (this.getPlayerStatus() && p.playerID == this.controlledBike.player)
+            	 {
+            		 g.setColor(Color.BLACK);
+            		 g.setFont(new Font("Serif", Font.BOLD, 18));
+            	 }
             	 g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
              }   
          }
