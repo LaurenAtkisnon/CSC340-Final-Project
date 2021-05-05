@@ -1,16 +1,16 @@
-import java.io.Serializable;
-import java.awt.Color;
-
 /***************
  * Message
  * Author: Christian Duncan
  * Spring 21: CSC340
- * 
- * 
+ *
+ *
  * Represents a join message to transmit.
  *    Client sends this message to the server.
  *    Contains the name and the color
  ***************/
+
+import java.io.Serializable;
+import java.awt.Color;
 
 public class JoinMessage extends Message implements Serializable {
     String name; // the name the client wishes to use
@@ -23,5 +23,5 @@ public class JoinMessage extends Message implements Serializable {
         this.color = color;
         this.playMode = playMode;
     }
-    
+
 }

@@ -1,3 +1,11 @@
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ * Created By: Lauren
+ * Modified by: Charles Rescsanski, Timothy Carta, Ryan Hayes
+ * Main game GUI
+ ***************/
+
 import javax.swing.*;
 import javax.swing.text.DefaultCaret;
 import java.awt.*;
@@ -38,12 +46,12 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         JMenu jmHelp = new JMenu("Help");
         About = new JMenuItem("About");
         jmHelp.add(About);
-        
+
         Credit = new JMenuItem("Credit");
         jmHelp.add(Credit);
         menuBar.add(jmHelp);
         setJMenuBar(menuBar);
-        
+
 
         /* chat
         JPanel chatFrame = new JPanel(new BorderLayout());
@@ -123,7 +131,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         setResizable(false);
         setVisible(true);
 
-       
+
         username = JOptionPane.showInputDialog(null, "Enter your desired username:");
         gameGrid.connect(hostname, username, port);
         while(gameGrid.getConnectStatus() != true)
@@ -132,7 +140,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         	{
         		JOptionPane.showMessageDialog(null, "Error: A connection could not be established with the specified server.");
         		hostname = JOptionPane.showInputDialog(null, "Please enter a different hostname.");
-        	    try 
+        	    try
     	        {
     	        	port = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the server port:"));
     	    	}
@@ -144,15 +152,15 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         		gameGrid.connect(hostname, username, port);
         	}
         }
-        
+
         String[] values = {"Player", "Spectator"};
         Boolean playerMode = true;
-        
+
         Object selected = JOptionPane.showInputDialog(null, "Choose the Mode:", "Selection", JOptionPane.DEFAULT_OPTION, null, values, "Player");
         if (selected != null)
         {
         	String selectedOption = selected.toString();
-        	
+
         	if (selectedOption == "Spectator")
         	{
         		playerMode = false;
@@ -214,7 +222,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
             case KeyEvent.VK_S:
                 gameGrid.turnSouth();
                 break;
-            /*    
+            /*
             case KeyEvent.VK_SPACE:
                 gameGrid.pauseMovement(); // for debugging purposes
                 break;
@@ -222,7 +230,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
             default:
                 break;
     		}
-        
+
         }
     }
 

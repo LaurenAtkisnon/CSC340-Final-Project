@@ -1,11 +1,10 @@
-
 /***************
  * GameServer
  * Author: Christian Duncan
  * Spring 21: CSC340
- * 
+ *
  * Modified by: Charles Rescsanski, Timothy Carta, Ryan Hayes
- * 
+ *
  * This is a stand-alone application with the following functions:
  *  1. Listen for connections on a port.
  *  2. One thread that continuously listens for connections.
@@ -41,7 +40,7 @@ public class GameServer implements Runnable {
 
         /**
          * The constructor
-         * 
+         *
          * @param socket The socket attached to this connection
          * @param name   The "name" of this connection - for debugging purposes
          **/
@@ -85,13 +84,13 @@ public class GameServer implements Runnable {
             } catch (IOException e) {
                 printMessage("Error trying to close socket. " + e.getMessage());
             }
-            //Inform the server to remove its reference to this connection thread class	
+            //Inform the server to remove its reference to this connection thread class
             removeConnection(this);
         }
 
         /**
          * Process one message that has been sent through this connection
-         * 
+         *
          * @param line The message to process
          **/
         private void processMessage(Object message) {
@@ -127,7 +126,7 @@ public class GameServer implements Runnable {
         private void processJoinMessage(JoinMessage message) {
             this.name = message.name;
             this.color = message.color;
- 
+
             if (message.playMode)
             {
             	this.playerID = gameEngine.addPlayer(name, color);
@@ -138,8 +137,8 @@ public class GameServer implements Runnable {
             	this.playerID = -2;
             	debug.println(3, "Spectator " + this.name + " is registered with id = " + this.playerID);
             }
-            
-            
+
+
             transmitMessage(new JoinResponseMessage(this.name, this.playerID));
 
         }
@@ -164,7 +163,7 @@ public class GameServer implements Runnable {
 
         /**
          * Print out the message (with a little name id in front)
-         * 
+         *
          * @param message The message to print out
          **/
         private void printMessage(String message) {
@@ -221,7 +220,7 @@ public class GameServer implements Runnable {
         connection.add(c);
         c.start(); // Start the thread.
     }
-    
+
     public void removeConnection(Connection c)
     {
     	debug.println(3, "Game Server: Removing Connection to client: " + c.name);
@@ -233,7 +232,7 @@ public class GameServer implements Runnable {
     }
 
     /**
-     * 
+     *
      * /** Return a (deep) clone of the game state. Thus any changes to the game
      * state must be made through the game server.
      **/

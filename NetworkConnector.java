@@ -1,9 +1,13 @@
-/*
-connects client to the server -- processes the commands between the client and the server
-also creats threads
- */
-
-
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ *
+ * Created By: Lauren
+ * Modified by: Charles, Timothy, Ryan
+ *
+ * connects client to the server -- processes the commands between the client and the server
+ * also creats threads
+ ***************/
 import javax.swing.*;
 
 import java.awt.Color;
@@ -46,7 +50,7 @@ public class NetworkConnector {
             connection.start();
         }
 
-    
+
     }
     /*
     feel like there should be a method here that connects the server w the port but
@@ -61,22 +65,22 @@ public class NetworkConnector {
 	    in = new ObjectInputStream(socket.getInputStream());
 	    this.status = true; //a connection has been established
 	    return true;
-    }   
-        catch (UnknownHostException e) 
+    }
+        catch (UnknownHostException e)
         {
         this.status = false;
 	    System.out.println("Unknown host: " + hostname);
 	    System.out.println("             " + e.getMessage());
-        } 
+        }
         catch (IOException e) {
         	this.status = false;
         	System.out.println("IO Error: Error establishing communication with server.");
         	System.out.println("          " + e.getMessage());
-        } 
-    
+        }
+
     	return false;
     }
-    
+
     public void retry(String hostname, int port)
     {
     	this.hostname = hostname;
@@ -87,9 +91,9 @@ public class NetworkConnector {
             //startup a thread that received and processes incoming communication from the server
             Connection connection = new Connection();
             connection.start();
-        }	
+        }
     }
-    
+
     public Boolean getStatus()
     {
     	return this.status;
@@ -98,14 +102,14 @@ public class NetworkConnector {
     {
     	this.status = null;
     }
-    
+
     void registerPlayer(Color color, Boolean playMode)
     {
     	//System.out.println("Let's ask the server if we can join the game.");
         JoinMessage message = new JoinMessage(this.username, color, playMode);
         transmitMessage(message);
-        
-    } 
+
+    }
     /*
     //send the current x&y position of the user bike (NOT COMP)
     public void sendLocation(int x, int y) {
@@ -113,17 +117,17 @@ public class NetworkConnector {
     	transmitMessage(new MovePlayerMessage(x, y));
     }
     */
-    
+
     public void updateDirection(int newDirection)
     {
     	transmitMessage(new ChangeDirectionMessage(newDirection));
     }
-    
+
     public String getUserName()
     {
     	return this.username;
     }
-    
+
     private void transmitMessage(Object message)
     {
         try{
@@ -138,16 +142,16 @@ public class NetworkConnector {
         {
             debug.println(3, "Error transmitting message: " + message);
         }
-            
+
         }
-    
+
     /*
     //tell the server that the user dies
     public void notifyDeath() {
         sendCommand("set-dead","true");
     }
     */
-    
+
     public GameState getGameState()
     {
     	return this.gameState;
@@ -196,7 +200,7 @@ public class NetworkConnector {
 	private void startGame(int userID){
 	    grid.startGame(userID);
 	}
-	
+
 	/*
 	//processes usernames from server and stores them
     private void setPsayers(String value){
@@ -204,7 +208,7 @@ public class NetworkConnector {
     }
 	*/
 
-	
+
 	/*
     //updates location of remote bike
     private void updateLocation(String value){
@@ -251,7 +255,7 @@ public class NetworkConnector {
                     System.out.println("    Message: " + e.getMessage());
                 }
             }
-           
+
         }
         /*
         Process one message that has been sent through this connection.
@@ -298,12 +302,12 @@ public class NetworkConnector {
 
     }
 
-  
+
 
     /*
     method for listener class (if making one) waits for the data to be
     received from the server & itll just run
     doesnt get calles directly & is ran as a seperate thread
-    so just parse commands 
+    so just parse commands
      */
 }

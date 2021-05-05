@@ -1,3 +1,11 @@
+/***************
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ * Created By: Lauren
+ * Modified by: Charles Rescsanski, Timothy Carta, Ryan Hayes, Griffin King
+ * Main game GUI
+ ***************/
+
 import java.util.concurrent.TimeUnit;
 import javax.swing.JOptionPane;
 
@@ -8,32 +16,32 @@ public class Bike {
     public static final int DIRECTION_WEST = 3; //WEST
 
     public int player; //player id
-   
+
     private NetworkConnector connector; //network
 
     public Bike(int playerID, NetworkConnector _connector){
-  
+
     	this.player = playerID;
     	this.connector = _connector;
-         
+
     }
     //east directions & cant go backwards
     public void turnWest(){
     	/*
         if(direction!= DIRECTION_EAST){
             direction = DIRECTION_WEST;
-        } 
+        }
         */
         connector.updateDirection(DIRECTION_WEST);
        }
-    	
+
 
     public void turnEast(){
     	/*
         if(direction != DIRECTION_WEST){
             direction = DIRECTION_EAST;
         }
-        */ 
+        */
     	connector.updateDirection(DIRECTION_EAST);
         }
 
@@ -41,7 +49,7 @@ public class Bike {
     	/*
         if(direction != DIRECTION_NORTH){
             direction = DIRECTION_SOUTH;
-        } 
+        }
         */
     		connector.updateDirection(DIRECTION_SOUTH);
        }
@@ -54,15 +62,15 @@ public class Bike {
         */
     	connector.updateDirection(DIRECTION_NORTH);
     }
-    
-    
-   
-    
+
+
+
+
     public void setID(int id)
     {
     	this.player = id;
     }
-    
-    
-	
+
+
+
 }

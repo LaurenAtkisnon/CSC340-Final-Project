@@ -1,3 +1,11 @@
+/***************
+ * Message
+ * Author: Christian Duncan
+ * Spring 21: CSC340
+ *
+ *
+ * Server sends to the client their playerID and their name.
+ ***************/
 import javax.swing.*;
 
 
@@ -20,7 +28,7 @@ public class Grid extends JPanel {
     private NetworkConnector connector;
 
     private Color userColor; //color of client bike
-    
+
     //new instance of Grid
     public Grid(){
         //plus one to assure the edge
@@ -42,12 +50,12 @@ public class Grid extends JPanel {
     public void startGame(int controlled){
         try{
                 Thread.sleep(1000);
-        } 
+        }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-    
+
         //controlledBike = new Bike(25, 75, grid, -1, Bike.DIRECTION_EAST, this);
 
         //controlledBike.startGame();
@@ -66,34 +74,34 @@ public class Grid extends JPanel {
     	{
     		this.connector.retry(hostname, port);
     	}
-        
+
     }
-    
+
     public Boolean getConnectStatus()
     {
     	return this.connector.getStatus();
     }
-    
+
     public void resetConnectionStatus()
     {
     	this.connector.resetStatus();
     }
-    
+
     public void registerPlayer(Color color, Boolean playMode)
     {
     	this.connector.registerPlayer(color, playMode);
     }
-    
+
     public void setPlayerID(int id)
     {
     	this.controlledBike = new Bike(id, this.connector);
     }
-    
+
     public Boolean getPlayerStatus()
     {
     	return this.controlledBike != null;
     }
-    
+
     //turns the user bike north
     public void turnNorth(){
         controlledBike.turnNorth();
@@ -110,23 +118,23 @@ public class Grid extends JPanel {
     public void turnWest(){
         controlledBike.turnWest();
     }
-        
+
     //popup saying you won
     public void won(){
     	text.setForeground(Color.BLUE);
     	text.setText("Congratuations " + this.connector.getUserName() + "! You Win!");
     	//JOptionPane.showMessageDialog(this, "You Win!");
-    	
+
     }
 
     //popup message you lost
     public void lost(String winner){
-    	
+
     	text.setForeground(Color.RED);
     	text.setText("You Lost :/ " + winner + " wins this round.");
-    	//JOptionPane.showMessageDialog(this, "You Lost :/");    	
+    	//JOptionPane.showMessageDialog(this, "You Lost :/");
     }
-    
+
     public void clearMessage() {
     	text.setText(null);
     }
@@ -136,12 +144,12 @@ public class Grid extends JPanel {
     public NetworkConnector getConnector() {
         return this.connector;
     }
-    
+
     public void displayWinLose(GameState gs)
     {
       if (this.controlledBike != null)
       {
-    	 
+
     		if (gs.getWinner() == this.controlledBike.player)
     	  	{
     	  		this.won();
@@ -150,7 +158,7 @@ public class Grid extends JPanel {
     	  	{
     	  		this.lost(gs.getWinnerName());
     	  	}
-    	 }	
+    	 }
     }
 
     //paints the grid
@@ -171,7 +179,7 @@ public class Grid extends JPanel {
         	Graphics2D g2 = (Graphics2D) g.create();
         	//System.out.println("Let's Draw the Game State!");
         	drawGameState(this.connector.getGameState(), g2);
-        }       
+        }
         /*
         for (int x = 0; x < GRID_WIDTH; x++) {
             for (int y = 0; y <GRID_HEIGHT; y++) {
@@ -191,8 +199,8 @@ public class Grid extends JPanel {
     }
 
     private void drawGameState(GameState gameState, Graphics2D g) {
-        
-    	if (gameState == null) 
+
+    	if (gameState == null)
     	{
     		//System.out.println("The Game State is NULL!");
     		return;   // No game to display yet!
@@ -222,11 +230,11 @@ public class Grid extends JPanel {
              {
             	 g.drawString("The next round will commence shortly.", WIDTH/2 - WIDTH/4, HEIGHT/2);
              }
-             
+
       	}
-    	
+
     }
-    
+
     /*
      // Draw the cells for this player
      private void drawPlayer(GameState.Player p, Graphics2D g) {
@@ -236,11 +244,11 @@ public class Grid extends JPanel {
         System.out.println("Let's draw Player: " + p.gridID);
     }
     */
-     
+
      //Draw the Grid with the players
      private void drawGrid(GameState gameState, Graphics2D g) {
     	 //draw the names of players
-    	 for (GameState.Player p: gameState.getPlayers()) { 
+    	 for (GameState.Player p: gameState.getPlayers()) {
     		 g.setColor(Color.DARK_GRAY);
              g.setFont(new Font("Serif", Font.BOLD, 15));
              if (p.getName() != null)
@@ -252,27 +260,27 @@ public class Grid extends JPanel {
             		 g.setFont(new Font("Serif", Font.BOLD, 18));
             	 }
             	 g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
-             }   
+             }
          }
     	 for (int x = 0; x < GRID_WIDTH; x++) {
     		 int[][] grid = gameState.getGrid();
-  
+
              for (int y = 0; y <GRID_HEIGHT; y++) {
                if (grid[x][y] != 0){
             	   for (GameState.Player p: gameState.getPlayers()) {
             		   if (grid[x][y] == p.gridID){
                            g.setColor(p.appearance);
                            g.fillRect(x * 5, y *5, 5, 5);
-                           
+
                            break;
-                       } 
+                       }
                    }
-                   
-                   
+
+
                }
              }
          }
      }
-     
-     
+
+
 }

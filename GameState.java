@@ -1,13 +1,8 @@
-
-/***********
- * Game State
- * Author: Christian Duncan
- * Modified By: Charles Rescanski, Timothy Carta, Ryan Hayes
- *
- * This application stores the state of the game.
- *   It includes a list of players
- *   It is not designed to be efficient - a different task altogether!
- ***********/
+/***************
+ * GameState
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Spring 21 | CSC340
+ ***************/
 import java.util.ArrayList;
 import java.util.Random;
 import java.awt.Color;
@@ -156,9 +151,9 @@ public class GameState implements Cloneable, Serializable {
 
     // The list of Players
     private ArrayList<Player> players;
-    
+
     private int winnerID = -1;
-    
+
     private boolean activeGame = false;
 
     private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT]; // keeps track of where each player has been
@@ -188,7 +183,7 @@ public class GameState implements Cloneable, Serializable {
     /**
      * Add a player to the Game State. All future references to this player should
      * use the index returned.
-     * 
+     *
      * @param name  The name of the player
      * @param color The color of the player
      * @returns The index of this player (in the ArrayList)
@@ -206,7 +201,7 @@ public class GameState implements Cloneable, Serializable {
         players.add(new Player(playerID, name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
         return players.size() - 1;
     }
-        
+
     public void removePlayer(int iD)
     {
     	players.removeIf(p -> (p.playerID == iD));
@@ -238,11 +233,11 @@ public class GameState implements Cloneable, Serializable {
             p.setLocation((int) startPos.getX(), (int) startPos.getY());
         }
     }
-    
+
     public void setGameActivity(boolean status) {
     	this.activeGame = status;
     }
-    
+
     public boolean getGameActivity()
     {
     	return this.activeGame;
@@ -251,7 +246,7 @@ public class GameState implements Cloneable, Serializable {
     /**
      * Set a player p's direction to dx and dy. This moves all cells in that
      * direction
-     * 
+     *
      * @param p  The player (index) to move
      * @param dx The amount to move in the x direction
      * @param dy The amount to move in the y direction
@@ -319,17 +314,17 @@ public class GameState implements Cloneable, Serializable {
     public ArrayList<Player> getPlayers() {
         return players;
     }
-    
+
     public void setWinner(int id)
     {
     	this.winnerID = id;
     }
-    
+
     public int getWinner()
     {
     	return this.winnerID;
     }
-    
+
     public String getWinnerName()
     {
     	for (Player p : this.getPlayers())

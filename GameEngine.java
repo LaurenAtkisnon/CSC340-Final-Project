@@ -1,11 +1,10 @@
-
 /***************
  * GameEngine
  * Author: Christian Duncan
  * Spring 21: CSC340
- * 
+ *
  * Modified By: Charles Rescsanski, Timothy Carta, Ryan Hayes
- * 
+ *
  * This is the Engine for the TRON game.  It is NOT a standalone application.  It relays commands
  * to the GameState.
  * It is very similar to SLING.IO, except that players have to avoid line trails
@@ -34,7 +33,7 @@ public class GameEngine implements Runnable {
     }
 
     /**
-     * 
+     *
      * /** Return a (deep) clone of the game state. Thus any changes to the game
      * state must be made through the game server.
      **/
@@ -106,8 +105,8 @@ public class GameEngine implements Runnable {
         int initialDirection = rand.nextInt(4);
         return gameState.addPlayer(name, color, initialDirection, this.activeGame);
     }
-    
-    
+
+
     public synchronized void removePlayer(int playerID)
     {
     	gameState.removePlayer(playerID);
@@ -116,7 +115,7 @@ public class GameEngine implements Runnable {
     /**
      * Set a player p's direction to dx and dy. This moves all cells in that
      * direction
-     * 
+     *
      * @param p  The player (index) to move
      * @param dx The amount to move in the x direction
      * @param dy The amount to move in the y direction
@@ -138,7 +137,7 @@ public class GameEngine implements Runnable {
             if (gameState.getPlayers().size() >= NUM_PLAYERS_BEFORE_START && keepGoing) {
                 startGame();
             }
-           
+
             if (this.activeGame) {
                 // Move Players
                 movePlayers();
@@ -187,7 +186,7 @@ public class GameEngine implements Runnable {
             if (!p.dead)
             {
             	p.move();
-            } 
+            }
         }
 
         // next, we need to update the grid to reflect the new position of each player
