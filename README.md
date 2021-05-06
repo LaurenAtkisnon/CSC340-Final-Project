@@ -20,14 +20,22 @@ Charles Rescanski, Timothy Carta, Ryan Hayes, Griffin King, and Lauren Atkinson
 3. Open a command terminal.
 4. Navigate to the folder containing the code.
 5. Compile all Java files by typing "javac \*.java."
-6. Start the server application by entering "java GameServer.java."
+6. Start the server application by entering "java GameServer.java [Optional Port]."
+   - If the port argument is omitted, the server will use port 1340 by default.
+   - Make note of the IP address of the machine running the server application.
 7. Start the client application by entering "java App.java."
-8. By default, the 
-9. 
+   - You'll notice that "127.0.0.1" is set as the default server IP/hostname and "1340" is set as the default port.
+   - Only use "127.0.0.1" as the server hostname if the server is running on the same machine.
+   - You can join the game as either a "player" or "spectator."
+8. The game will automatically start once at least one other player has joined.
+   - Players that join during the middle of a game session will be forced to watch the current session as spectators.
+   - Once the round is over, any new players will automatically be added to the following round.
+9. Press File -> Exit to leave the game server and close the application.
 
 ## Contributions:
 
 Charles:
+* 
 
 Timothy:
 * Allows for any number of connections.
