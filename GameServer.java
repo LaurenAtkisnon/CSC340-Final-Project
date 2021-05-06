@@ -84,8 +84,16 @@ public class GameServer implements Runnable {
             } catch (IOException e) {
                 printMessage("Error trying to close socket. " + e.getMessage());
             }
-            //Inform the server to remove its reference to this connection thread class
-            removeConnection(this);
+
+            //Inform the server to remove its reference to this connection thread class	
+            done = true;
+            debug.println(3, "Game Server: Removing Connection to client: " + this.name);
+            //If this connection belonged to a player, we must inform the gameEngine to remove the corresponding player
+            //from the gameState
+        	if (this.playMode)
+        	{
+        		gameEngine.removePlayer(this.playerID);
+        	}
         }
 
         /**
@@ -221,16 +229,6 @@ public class GameServer implements Runnable {
         c.start(); // Start the thread.
     }
 
-    public void removeConnection(Connection c)
-    {
-    	debug.println(3, "Game Server: Removing Connection to client: " + c.name);
-    	if (c.playMode)
-    	{
-    		gameEngine.removePlayer(c.playerID);
-    	}
-    	connection.remove(c);
-    }
-
     /**
      *
      * /** Return a (deep) clone of the game state. Thus any changes to the game
@@ -259,6 +257,10 @@ public class GameServer implements Runnable {
                         // debug.println(3, "Transmitting game states.");
                         GameState currentGameState = gameEngine.getGameState();
                         // transmit game state to every connection
+                        
+                        // Remove empty connections
+                        connection.removeIf((con)-> con.done == true);
+                       
                         // ONLY transmit if the player is registered
                         for (Connection con : connection) {
 
