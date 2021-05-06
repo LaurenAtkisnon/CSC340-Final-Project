@@ -1,5 +1,5 @@
 /***************
- * Message
+ * JoinResponseMessage
  * Author: Christian Duncan
  * Spring 21: CSC340
  *

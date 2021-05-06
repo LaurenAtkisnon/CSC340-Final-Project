@@ -1,19 +1,19 @@
 /***************
- * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescsanski
  * Spring 21 | CSC340
  *
  * Created By: Lauren
  * Modified by: Charles, Timothy, Ryan
  *
  * connects client to the server -- processes the commands between the client and the server
- * also creats threads
+ * also creates threads
  ***************/
 import javax.swing.*;
 
 import java.awt.Color;
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
+
 
 
 public class NetworkConnector {
@@ -25,18 +25,15 @@ public class NetworkConnector {
     private String username;
     private Debug debug;
     private Boolean status; //represent whether or not a connection has been established with the server
-    private int userId =-1;
     private Socket socket;
-    private Connection connection = null;
     private ObjectOutputStream out; //output stream for sending objects to server
     private ObjectInputStream in; //intput stream for receiving objects from server
-    private String[] otherPLayers;
     private Grid grid;
     private GameState gameState;
 
     //creates instance that connects host to the server
     public NetworkConnector(String hostname, String username, int port, Grid grid){
-    	this.debug = debug.getInstance();
+    	this.debug = Debug.getInstance();
     	this.port = port;
         this.username = username;
         this.hostname = hostname;
@@ -52,10 +49,6 @@ public class NetworkConnector {
 
 
     }
-    /*
-    feel like there should be a method here that connects the server w the port but
-    it feels redundant
-     */
 
     public boolean establishConnection() {
         // Establish connection with the Server
@@ -110,13 +103,6 @@ public class NetworkConnector {
         transmitMessage(message);
 
     }
-    /*
-    //send the current x&y position of the user bike (NOT COMP)
-    public void sendLocation(int x, int y) {
-        //sendCommand("set-location", ("" + x + "," + y));
-    	transmitMessage(new MovePlayerMessage(x, y));
-    }
-    */
 
     public void updateDirection(int newDirection)
     {
@@ -145,89 +131,12 @@ public class NetworkConnector {
 
         }
 
-    /*
-    //tell the server that the user dies
-    public void notifyDeath() {
-        sendCommand("set-dead","true");
-    }
-    */
 
     public GameState getGameState()
     {
     	return this.gameState;
     }
 
-    /*
-    //comannd string to send code back to server -- may not be necessary for the requirements of project
-    public void pressCommand(String cmdString){
-        String[] temp = cmdString.split(":");
-        String command = temp[0];
-        String value = temp[1];
-
-
-        switch(command) {
-            case "rsp-user-id":
-                setUserID(value);
-                break;
-
-
-            case "rsp-game-start":
-                startGame(value);
-                break;
-
-
-            case "rsp-username-list":
-                setPlayers(value);
-                break;
-
-
-            case "rsp-update-location":
-                updateLocation(value);
-                break;
-
-
-            case "rsp-dead":
-                grid.stop();
-                grid.won();
-                break;
-        } }
-    /*
-    methods to process different commands from the server
-     */
-
-
-    //calls the method in Grid
-	private void startGame(int userID){
-	    grid.startGame(userID);
-	}
-
-	/*
-	//processes usernames from server and stores them
-    private void setPsayers(String value){
-    otherPlayers = value.split(", ");
-    }
-	*/
-
-
-	/*
-    //updates location of remote bike
-    private void updateLocation(String value){
-    String[] pair = value.split(", ");
-    grid.getServerBike().setLocation(Integer.parseInt(pair[0]), Integer.parseInt(pair[1]));
-    }
-	*/
-
-    //sets the user ID which determins the color and start location
-    private void setUserID(String value){
-    userId = Integer.parseInt(value);
-    }
-
-    /*
-    //get userID
-    public int getUserID(){
-    return userID;
-    }
-	*/
 
     /*
     runnable class that opens the sits and waits for data to be
@@ -302,12 +211,4 @@ public class NetworkConnector {
 
     }
 
-
-
-    /*
-    method for listener class (if making one) waits for the data to be
-    received from the server & itll just run
-    doesnt get calles directly & is ran as a seperate thread
-    so just parse commands
-     */
 }

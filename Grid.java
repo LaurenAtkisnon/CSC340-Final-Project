@@ -1,69 +1,39 @@
 /***************
- * Message
- * Author: Christian Duncan
+ * Grid
+ * Author: Lauren Atkinson, Charles Rescsanski
  * Spring 21: CSC340
  *
  *
- * Server sends to the client their playerID and their name.
+ * This is the game board of the client application where the elements of the game are drawn.
  ***************/
 import javax.swing.*;
 
 
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Grid extends JPanel {
-    private final int GRID_HEIGHT = 125; //height for calculating the size of GUI
+
+	private static final long serialVersionUID = 340L;
+	private final int GRID_HEIGHT = 125; //height for calculating the size of GUI
     private final int GRID_WIDTH = 175; //width
 
-    private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT]; //keeps track of where player has gone on board
     private final int WIDTH = GRID_WIDTH * 5; //pixels of width
     private final int HEIGHT = GRID_HEIGHT * 5; //pixels of height
-    private final Color PLAYER1 = Color.BLUE; //player1
-    private final Color PLAYER2 = Color.RED; //player2
 
     private Bike controlledBike; //player1
-    private JLabel text;
-    private JLabel info;
+    private JLabel text; //displays the win/lose message at the end of each game round
     private NetworkConnector connector;
-
-    private Color userColor; //color of client bike
 
     //new instance of Grid
     public Grid(){
         //plus one to assure the edge
     	text = new JLabel();
     	text.setFont(new Font("Verdana", Font.BOLD, 30));
-    	info = new JLabel();
     	this.add(text, BorderLayout.SOUTH);
-    	this.add(info, BorderLayout.SOUTH);
         setPreferredSize(new Dimension(WIDTH + 1, HEIGHT + 1));
-
-        //set everything to 0
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                grid[x][y] = 0;
-            } }
-        userColor = UIManager.getColor("Panel.background");
-    }
-//adds bikes to grid
-    public void startGame(int controlled){
-        try{
-                Thread.sleep(1000);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        //controlledBike = new Bike(25, 75, grid, -1, Bike.DIRECTION_EAST, this);
-
-        //controlledBike.startGame();
     }
 
-    /*
-    GAME SERVER CONNECTION INTITION HERE
-     */
+    //GAME SERVER CONNECTION INTITION HERE
     public void connect(String hostname, String username, int port)
     {
     	if (this.connector == null)
@@ -123,16 +93,13 @@ public class Grid extends JPanel {
     public void won(){
     	text.setForeground(Color.BLUE);
     	text.setText("Congratuations " + this.connector.getUserName() + "! You Win!");
-    	//JOptionPane.showMessageDialog(this, "You Win!");
-
-    }
+       }
 
     //popup message you lost
     public void lost(String winner){
 
     	text.setForeground(Color.RED);
     	text.setText("You Lost :/ " + winner + " wins this round.");
-    	//JOptionPane.showMessageDialog(this, "You Lost :/");
     }
 
     public void clearMessage() {
@@ -180,40 +147,15 @@ public class Grid extends JPanel {
         	//System.out.println("Let's Draw the Game State!");
         	drawGameState(this.connector.getGameState(), g2);
         }
-        /*
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y <GRID_HEIGHT; y++) {
-              if (grid[x][y] != 0){
-                  if (grid[x][y] == 1){
-                      g.setColor(PLAYER1);
-                  } else if (grid [x][y] ==2){
-                      g.setColor(PLAYER2);
-                  }
-                  g.fillRect(x * 5, y *5, 5, 5);
-              }
-            }
-        }
-        g.setColor(userColor);
-        g.fillRect(0,501,501,505);
-        */
     }
 
     private void drawGameState(GameState gameState, Graphics2D g) {
 
     	if (gameState == null)
     	{
-    		//System.out.println("The Game State is NULL!");
     		return;   // No game to display yet!
     	}
-    	//System.out.println("Let's draw the board");
-        // Iterate through all of the players and all of the cells in the game
-        // Again, not done super efficiently - could crop ones that are not visible!
-    	/*
-        ArrayList<GameState.Player> player = gameState.getPlayers();
-        for (GameState.Player p: player) {
-            drawPlayer(p, g);
-        }
-        */
+ 
       	if (gameState.getGameActivity())
       	{
       		drawGrid(gameState, g);
@@ -234,16 +176,6 @@ public class Grid extends JPanel {
       	}
 
     }
-
-    /*
-     // Draw the cells for this player
-     private void drawPlayer(GameState.Player p, Graphics2D g) {
-        g.setPaint(p.appearance);
-        g.fillRect(p.locx * 5, p.locy *5, 5, 5);
-        System.out.println("X Coordinate: " + p.locx + ", Y Coordinate: " + p.locy);
-        System.out.println("Let's draw Player: " + p.gridID);
-    }
-    */
 
      //Draw the Grid with the players
      private void drawGrid(GameState gameState, Graphics2D g) {

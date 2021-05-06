@@ -1,6 +1,6 @@
 /***************
  * GameState
- * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescsanski
  * Spring 21 | CSC340
  ***************/
 import java.util.ArrayList;

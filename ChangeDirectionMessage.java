@@ -1,10 +1,10 @@
 /***************
- * Message
- * Author: Christian Duncan
+ * ChangeDirectionMessage
+ * Author: Charles Rescanski
  * Spring 21: CSC340
  *
  *
- * Server sends to the client their playerID and their name.
+ * Client sends to the server a request to change the direction of their player.
  ***************/
 
 import java.io.Serializable;

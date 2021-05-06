@@ -1,12 +1,13 @@
 /***************
- * Message
+ * JoinMessage
  * Author: Christian Duncan
  * Spring 21: CSC340
  *
  *
  * Represents a join message to transmit.
  *    Client sends this message to the server.
- *    Contains the name and the color
+ *    Contains the name, color, and play mode.  
+ *    (The client can join the game as either a player or spectator)
  ***************/
 
 import java.io.Serializable;

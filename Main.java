@@ -256,8 +256,4 @@ public class Main extends JFrame implements KeyListener, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
     }
-
-    /*
-     * A connection to handle incoming communincation from the server.
-     */
 }

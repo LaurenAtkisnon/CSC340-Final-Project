@@ -9,7 +9,7 @@
  *  1. Listen for connections on a port.
  *  2. One thread that continuously listens for connections.
  *  3. One thread for each new connection that is established
- *  4. One thread responsible for transmiting the gameState to all clients
+ *  4. One thread responsible for transmitting the gameState to all clients
  * Note that this server can handle multiple types of games.
  ***************/
 import java.awt.Color;
@@ -109,22 +109,12 @@ public class GameServer implements Runnable {
             if (message instanceof JoinMessage) {
                 processJoinMessage((JoinMessage) message);
             }
-            /*
-             * else if (message instanceof MovePlayerMessage) {
-             * processMovePlayerMessage((MovePlayerMessage) message); }
-             */
             else if (message instanceof ChangeDirectionMessage) {
                 processChangeDirectionMessage((ChangeDirectionMessage) message);
             } else {
                 debug.println(3, "Unrecognized Message");
             }
         }
-
-        /*
-         * private void processMovePlayerMessage(MovePlayerMessage message) { if
-         * (this.playerID == -1) return; gameEngine.setPlayerLocation(this.playerID,
-         * message.x, message.y); }
-         */
 
         private void processChangeDirectionMessage(ChangeDirectionMessage message) {
             if (this.playerID == -1)
@@ -164,10 +154,6 @@ public class GameServer implements Runnable {
             } catch (IOException | NullPointerException e) {
                 debug.println(3, "Error transmitting message: " + message);
             }
-
-            // in = null;
-            // out = null;
-            // socket = null;
 
         }
 
