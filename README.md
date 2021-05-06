@@ -35,7 +35,25 @@ Charles Rescanski, Timothy Carta, Ryan Hayes, Griffin King, and Lauren Atkinson
 ## Contributions:
 
 Charles:
-* 
+* Implemented “Spectator” Mode
+* Robust and Easy to Use Startup Screen
+   - One Dialog for all connection/setup input
+   - Added JColorChooser to customize player color
+   - Unlimited Connection Attempts 
+* Added Labels to Identify the Names of Players on the Screen
+   - Bold label identifies controlled player
+* Updated Board to Display Win/Lose Message at End of Each Round
+   - If Lost, Name of Winning Player is Shown
+* Implemented Messages for Client-Server Communication
+   - ChangeDirectionMessage.java
+* Modified GameEngine to Detect Player Collisions
+   - Compute and Store “Winner” at end of each round
+* Robustness: Removal of Players from GameState when Connection Dies
+* Removed Chat Interface -> Expanded Size of Game Board
+* Modified GameState to Keep Track of Players, Current Game Grid, Current Direction of Each Player
+* Modified GameEngine loop to move only players that have not been eliminated
+* Significant Testing with Multiple Clients and Spectators
+
 
 Timothy:
 * Allows for any number of connections.
