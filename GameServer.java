@@ -24,6 +24,7 @@ public class GameServer implements Runnable {
     public static final int GAME_STATE_REFRESH = 100; // Set to 500 for slower speeds, good for debugging
     Debug debug;
     HashSet<Connection> connection; // The set of client connections
+    int spectatorCount = -1;
 
     public static final int DEFAULT_PORT = 1340;
 
@@ -142,7 +143,8 @@ public class GameServer implements Runnable {
             }
             else {
             	this.playMode = false;
-            	this.playerID = -2;
+            
+            	this.playerID = adjustSpectatorCount();
             	debug.println(3, "Spectator " + this.name + " is registered with id = " + this.playerID);
             }
 
@@ -227,6 +229,11 @@ public class GameServer implements Runnable {
         Connection c = new Connection(clientSocket, name);
         connection.add(c);
         c.start(); // Start the thread.
+    }
+    
+    public synchronized int adjustSpectatorCount(){
+        this.spectatorCount --;
+        return this.spectatorCount;
     }
 
     /**
