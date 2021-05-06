@@ -1,5 +1,5 @@
 /***************
- * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
+ * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescsanski
  * Spring 21 | CSC340
  * Created By: Lauren
  * Modified by: Charles Rescsanski, Timothy Carta, Ryan Hayes
@@ -19,13 +19,12 @@ public class Main extends JFrame implements KeyListener, MouseListener {
     private final String GAME_VERSION = "0.1";
     private JMenuItem Exit; // exit button
     private JMenuItem About; // about button
-    private JMenuItem serverPort; //for changing server Port
-    private JMenuItem serverIP; //for changing server ip
     private JMenuItem Credit; // creidts
     private Grid gameGrid; // shows the trail on the main GUI
     private String username; // username for chat capabilites
     private String hostname = "127.0.0.1";
     private int port = GameServer.DEFAULT_PORT;
+    private boolean playerMode = true;
     private Color color = Color.BLUE;
 
     public static void main(String[] args) {
@@ -37,10 +36,6 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         JMenuBar menuBar = new JMenuBar();
         JMenu jmFile = new JMenu("File");
         Exit = new JMenuItem("Exit");
-        serverPort = new JMenuItem("Change Server Port");
-        serverIP = new JMenuItem("Change Server IP");
-        jmFile.add(serverPort);
-        jmFile.add(serverIP);
         jmFile.add(Exit);
         menuBar.add(jmFile);
         JMenu jmHelp = new JMenu("Help");
@@ -52,25 +47,6 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         menuBar.add(jmHelp);
         setJMenuBar(menuBar);
 
-
-        /* chat
-        JPanel chatFrame = new JPanel(new BorderLayout());
-        JTextArea chat = new JTextArea(25, 60);
-        chat.setLineWrap(true);
-        chat.setEditable(false);
-        JScrollPane chatScroll = new JScrollPane(chat);
-        DefaultCaret caret1 = (DefaultCaret) chat.getCaret();
-        caret1.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        chatScroll.setHorizontalScrollBarPolicy(HORIZONTAL_SCROLLBAR_NEVER);
-
-        JTextField msg = new JTextField(25);
-
-        // ChatClient chatClient = new ChatClient(chat,msg);
-
-        add(chatFrame, BorderLayout.EAST);
-        chatFrame.add(chatScroll, BorderLayout.CENTER);
-        chatFrame.add(msg, BorderLayout.SOUTH);
-        */
 
         // grid for game
         gameGrid = new Grid();
@@ -95,31 +71,9 @@ public class Main extends JFrame implements KeyListener, MouseListener {
             } else if (choice == Credit) {
                 JOptionPane.showMessageDialog(null, "LightBikes v" + GAME_VERSION + "\n" + "Created in May 2021.\n\n"
                         + "DEVELOPERS:\n" + "L.Atkinson\n" + "T.Carta\n" + "R.Hayes\n" + "C.Rescsanki");
-            } else if (choice == serverPort)
-            {
-            	String portName = JOptionPane.showInputDialog("Please enter a server PORT.\nThis only takes effect after the next connection attempt.\nCurrent port: " + port);
-                if (portName != null && portName.length() > 0) {
-                    try {
-                        int p = Integer.parseInt(portName);
-                        if (p < 0 || p > 65535) {
-                            JOptionPane.showMessageDialog(null, "The port [" + portName + "] must be in the range 0 to 65535.", "Invalid Port Number", JOptionPane.ERROR_MESSAGE);
-                        } else {
-                            port = p;  // Valid.  Update the port
-                        }
-                    } catch (NumberFormatException ignore) {
-                        JOptionPane.showMessageDialog(null, "The port [" + portName + "] must be an integer.", "Number Format Error", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            } else if (choice == serverIP)
-            {
-            	 String newHostName = JOptionPane.showInputDialog("Please enter a server IP/Hostname.\nThis only takes effect after the next connection attempt.\nCurrent server address: " + hostname);
-                 if (newHostName != null && newHostName.length() > 0)
-                     hostname = newHostName;
-            }
+            } 
         };
 
-        serverIP.addActionListener(menuListener);
-        serverPort.addActionListener(menuListener);
         Exit.addActionListener(menuListener);
         About.addActionListener(menuListener);
         Credit.addActionListener(menuListener);
@@ -130,42 +84,23 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
-
-
-        username = JOptionPane.showInputDialog(null, "Enter your desired username:");
+        
+      
+        this.startupDialog();
         gameGrid.connect(hostname, username, port);
+        
         while(gameGrid.getConnectStatus() != true)
         {
         	if (gameGrid.getConnectStatus() == false)
         	{
         		JOptionPane.showMessageDialog(null, "Error: A connection could not be established with the specified server.");
-        		hostname = JOptionPane.showInputDialog(null, "Please enter a different hostname.");
-        	    try
-    	        {
-    	        	port = Integer.parseInt(JOptionPane.showInputDialog(null, "Enter the server port:"));
-    	    	}
-    	        catch (NumberFormatException e)
-    	        {
-    	        	port = GameServer.DEFAULT_PORT;
-    	        }
+        		
+        		this.startupDialog();
         		gameGrid.resetConnectionStatus();
         		gameGrid.connect(hostname, username, port);
         	}
         }
 
-        String[] values = {"Player", "Spectator"};
-        Boolean playerMode = true;
-
-        Object selected = JOptionPane.showInputDialog(null, "Choose the Mode:", "Selection", JOptionPane.DEFAULT_OPTION, null, values, "Player");
-        if (selected != null)
-        {
-        	String selectedOption = selected.toString();
-
-        	if (selectedOption == "Spectator")
-        	{
-        		playerMode = false;
-        	}
-        }
         if (playerMode)
         {
         	 color = JColorChooser.showDialog(Main.this, "Select your color!", Color.BLUE);
@@ -178,8 +113,7 @@ public class Main extends JFrame implements KeyListener, MouseListener {
         gameGrid.addKeyListener(this);
         gameGrid.addMouseListener(this);
         gameGrid.requestFocus();
-        // chatClient.connect(hostname, username);
-
+   
         // Create animation
         Timer animationTimer; // A Timer that will emit events to force redrawing of game state
         animationTimer = new Timer(16, new ActionListener() {
@@ -188,6 +122,68 @@ public class Main extends JFrame implements KeyListener, MouseListener {
             }
         });
         animationTimer.start();
+    }
+    
+    public void startupDialog()
+    {
+	  JPanel pane = new JPanel();
+      pane.setLayout(new GridLayout(0, 2, 2, 2));
+      JTextField host = new JTextField(hostname, 15);
+      JTextField portNum = new JTextField(Integer.toString(port), 5);
+      JTextField playerName = new JTextField(username, 15);
+      String[] values = {"Player", "Spectator"};
+      JComboBox<String> box = new JComboBox<String>(values);
+      box.setSelectedIndex(0);
+      pane.add(new JLabel("Server IP/hostname:"));
+      pane.add(host);
+      pane.add(new JLabel("Server PORT:"));
+      pane.add(portNum);
+      pane.add(new JLabel("Player Name:"));
+      pane.add(playerName);
+      pane.add(new JLabel("Game Mode:"));
+      pane.add(box);
+    
+      int option = JOptionPane.showConfirmDialog(this, pane, "Join a Game Server", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
+      
+      if (option == JOptionPane.OK_OPTION) {
+      	String newHostName = host.getText();
+      	if (newHostName != null && newHostName.length() > 0)
+            hostname = newHostName;
+      	else {
+      		JOptionPane.showMessageDialog(null, "The hostname cannot be empty.", "Invalid Hostname", JOptionPane.ERROR_MESSAGE);
+      		this.startupDialog();
+      		return;
+      	}
+      	String newUserName = playerName.getText();
+      	if (newUserName != null && newUserName.length() > 0)
+            username = newUserName;
+      	else {
+      		JOptionPane.showMessageDialog(null, "The player name cannot be empty.", "Invalid Player Name", JOptionPane.ERROR_MESSAGE);
+      		this.startupDialog();
+      		return;
+      	}
+      	if (portNum.getText() != null && portNum.getText().length() > 0) {
+              try {
+                  int p = Integer.parseInt(portNum.getText());
+                  if (p < 0 || p > 65535) {
+                      JOptionPane.showMessageDialog(null, "The port [" + portNum.getText() + "] must be in the range 0 to 65535.", "Invalid Port Number", JOptionPane.ERROR_MESSAGE);
+                      this.startupDialog();
+                      return;
+                  } else {
+                      port = p;  // Valid.  Update the port
+                  }
+              } catch (NumberFormatException ignore) {
+                  JOptionPane.showMessageDialog(null, "The port [" + portNum.getText() + "] must be an integer.", "Number Format Error", JOptionPane.ERROR_MESSAGE);
+                  this.startupDialog();
+                  return;
+              }
+          }
+      	
+      	if (box.getSelectedItem() == "Spectator")
+      	{
+      		playerMode = false;
+      	}
+      }
     }
 
     /**
@@ -222,11 +218,6 @@ public class Main extends JFrame implements KeyListener, MouseListener {
             case KeyEvent.VK_S:
                 gameGrid.turnSouth();
                 break;
-            /*
-            case KeyEvent.VK_SPACE:
-                gameGrid.pauseMovement(); // for debugging purposes
-                break;
-             */
             default:
                 break;
     		}
