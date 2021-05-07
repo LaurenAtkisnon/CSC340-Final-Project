@@ -33,9 +33,10 @@ Charles Rescanski, Timothy Carta, Ryan Hayes, Griffin King, and Lauren Atkinson
 9. Press File -> Exit to leave the game server and close the application.
 
 ## How to Play:
-    Once the game begin, you can locate your player "bike" as the one with your name displayed beside it.  Your player will automatically spawn in a random
-    location and move in a random direction (up, down, left, or right) at the start of the round.  Use the arrow keys are WSAD to change the direction of the 
-    player.  You become eliminated from the game if your player collides with the edge of the screen or a line drawn on the screen.  You win the game if you surive
+    Once the game begin, you can locate your player "bike" as the one with your name displayed beside it.  Your player 
+    will automatically spawn in a random location and move in a random direction (up, down, left, or right) at the start 
+    of the round.  Use the arrow keys are WSAD to change the direction of the player.  You become eliminated from the game 
+    if your player collides with the edge of the screen or a line drawn on the screen.  You win the game if you surive
     long enough to become the last remaining player alive.  
 
 ## Contributions:
