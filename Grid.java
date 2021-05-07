@@ -92,7 +92,7 @@ public class Grid extends JPanel {
     //popup saying you won
     public void won(){
     	text.setForeground(Color.BLUE);
-    	text.setText("Congratuations " + this.connector.getUserName() + "! You Win!");
+    	text.setText("Congratulations " + this.connector.getUserName() + "! You Win!");
        }
 
     //popup message you lost
@@ -117,11 +117,11 @@ public class Grid extends JPanel {
       if (this.controlledBike != null)
       {
 
-    		if (gs.getWinner() == this.controlledBike.player)
+    		if (gs.getWinnerID() == this.controlledBike.player)
     	  	{
     	  		this.won();
     	  	}
-    	  	else if (gs.getWinner() != -1)
+    	  	else if (gs.getWinnerID() != -1)
     	  	{
     	  		this.lost(gs.getWinnerName());
     	  	}

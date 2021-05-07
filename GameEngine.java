@@ -197,6 +197,7 @@ public class GameEngine implements Runnable {
     private synchronized boolean checkIfGameOver() {
         ArrayList<GameState.Player> players = gameState.getPlayers();
         int winnerID = -1;
+        String winnerName = null;
         int size = players.size();
         if (size > 0) {
             int alive = 0;
@@ -205,13 +206,14 @@ public class GameEngine implements Runnable {
                 if (!p.dead) {
                     alive++;
                     winnerID = i;
+                    winnerName = p.name;
                 }
             }
             // a multiplayer game ends when there is only one player left standing
             if (size > 1) {
             	if (alive == 1)
             	{
-            		gameState.setWinner(winnerID);
+            		gameState.setWinner(winnerID, winnerName);
             	}
                 return alive == 1;
             } else {
@@ -225,7 +227,7 @@ public class GameEngine implements Runnable {
     }
 
     private synchronized void resetGame() {
-    	gameState.setWinner(-1); //clear the winner
+    	gameState.setWinner(-1, null); //clear the winner
         gameState.resetGrid(); // reset the board
         this.keepGoing = true; // reset the enough players to start
         this.activeGame = false; // reset to a non active game until enough players are connected

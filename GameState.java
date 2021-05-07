@@ -153,6 +153,7 @@ public class GameState implements Cloneable, Serializable {
     private ArrayList<Player> players;
 
     private int winnerID = -1;
+    private String winnerName = null;
 
     private boolean activeGame = false;
 
@@ -315,26 +316,20 @@ public class GameState implements Cloneable, Serializable {
         return players;
     }
 
-    public void setWinner(int id)
+    public void setWinner(int id, String name)
     {
     	this.winnerID = id;
+    	this.winnerName = name;
     }
 
-    public int getWinner()
+    public int getWinnerID()
     {
     	return this.winnerID;
     }
 
     public String getWinnerName()
     {
-    	for (Player p : this.getPlayers())
-    	{
-    		if (p.playerID == this.winnerID)
-    		{
-    			return p.name;
-    		}
-    	}
-    	return null;
+    	return this.winnerName;
     }
 
     // Returns the grid containing the history of where each player has been
