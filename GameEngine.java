@@ -206,7 +206,7 @@ public class GameEngine implements Runnable {
         int winnerID = -1;
         String winnerName = null;
         int size = players.size();
-        if (size > 0) {
+        if (gameState.getNumPlayers() > 0) {
             int alive = 0;
             for (int i = 0; i < size; i++) {
             	if (players.get(i) != null)
@@ -221,7 +221,7 @@ public class GameEngine implements Runnable {
                
             }
             // a multiplayer game ends when there is only one player left standing
-            if (size > 1) {
+            if (gameState.getNumPlayers() > 1) {
             	if (alive == 1)
             	{
             		gameState.setWinner(winnerID, winnerName);
