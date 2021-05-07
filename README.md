@@ -23,7 +23,7 @@ Charles Rescanski, Timothy Carta, Ryan Hayes, Griffin King, and Lauren Atkinson
 6. Start the server application by entering "java GameServer.java [Optional Port]."
    - If the port argument is omitted, the server will use port 1340 by default.
    - Make note of the IP address of the machine running the server application.
-7. Start the client application by entering "java App.java."
+7. Start the client application by entering "java Main.java."
    - You'll notice that "127.0.0.1" is set as the default server IP/hostname and "1340" is set as the default port.
    - Only use "127.0.0.1" as the server hostname if the server is running on the same machine.
    - You can join the game as either a "player" or "spectator."
