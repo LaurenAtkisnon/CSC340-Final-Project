@@ -101,6 +101,11 @@ public class Grid extends JPanel {
     	text.setForeground(Color.RED);
     	text.setText("You Lost :/ " + winner + " wins this round.");
     }
+    
+    public void neutral(String winner) {
+    	text.setForeground(Color.BLACK);
+    	text.setText(winner + " wins this round.");
+    }
 
     public void clearMessage() {
     	text.setText(null);
@@ -126,6 +131,12 @@ public class Grid extends JPanel {
     	  		this.lost(gs.getWinnerName());
     	  	}
     	 }
+      else {
+    	if (gs.getWinnerID() != -1)
+  	  	{
+  	  		this.neutral(gs.getWinnerName());
+  	  	}
+      }
     }
 
     //paints the grid
