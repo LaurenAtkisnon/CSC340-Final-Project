@@ -81,5 +81,12 @@ Ryan:
 * Created README.md.
 
 Griffin:
+* 
 
 Lauren:
+* Created GameState 
+* Created GameEngine
+* Initial wireframe for the game 
+* Handled the Client side of projected
+* Handled the presentation 
+
