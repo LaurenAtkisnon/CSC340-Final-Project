@@ -1,67 +1,76 @@
 /***************
- * Team Members: Lauren Atkinson, Timothy Carta, Ryan Hayes, Griffin King, Charles Rescanscki
- * Spring 21 | CSC340
+ * Grid
+ * Author: Lauren Atkinson, Charles Rescsanski
+ * Spring 21: CSC340
  *
- * Grid class -- drawss the grid and keeps track of the players on the game 
+ *
+ * This is the game board of the client application where the elements of the game are drawn.
  ***************/
-
 import javax.swing.*;
+
+
 import java.awt.*;
 
 public class Grid extends JPanel {
-    private final int GRID_HEIGHT = 100; //height for calculating the size of GUI
-    private final int GRID_WIDTH = 100; //width
 
-    private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT]; //keeps track of where player has gone on board
+	private static final long serialVersionUID = 340L;
+	private final int GRID_HEIGHT = 125; //height for calculating the size of GUI
+    private final int GRID_WIDTH = 175; //width
+
     private final int WIDTH = GRID_WIDTH * 5; //pixels of width
     private final int HEIGHT = GRID_HEIGHT * 5; //pixels of height
-    private final Color PLAYER1 = Color.BLUE; //player1
-    private final Color PLAYER2 = Color.RED; //player2
 
-    private Bike bike1; //player1
-    private Bike bike2; //player2
-
-    private Bike controlledBike; //remote playr controls via Server
-
+    private Bike controlledBike; //player1
+    private JLabel text; //displays the win/lose message at the end of each game round
     private NetworkConnector connector;
-
-    private Color userColor; //color of client bike
 
     //new instance of Grid
     public Grid(){
         //plus one to assure the edge
+    	text = new JLabel();
+    	text.setFont(new Font("Verdana", Font.BOLD, 30));
+    	this.add(text, BorderLayout.SOUTH);
         setPreferredSize(new Dimension(WIDTH + 1, HEIGHT + 1));
-
-        //set everything to 0
-        for (int x = 0; x < GRID_WIDTH; x++) {
-            for (int y = 0; y < GRID_HEIGHT; y++) {
-                grid[x][y] = 0;
-            } }
-        userColor = UIManager.getColor("Panel.background");
     }
-//adds bikes to grid
-    public void startGame(int controlled){
-        try{
-                Thread.sleep(1000);
-        } catch (Exception e)
-        {
-        e.printStackTrace();
-    }
-    bike1 = new Bike(25, 75, grid, 1, Bike.DIRECTION_EAST, this);
-    bike2 = new Bike(75, 25, grid, 2, Bike.DIRECTION_WEST, this);
 
-    if(controlled ==1){
-        controlledBike = bike1;
-        serverBike = bike2;
-    } else {
-        controlledBike = bike2;
-        serverBike = bike1;
-    }
-    controlledBike.startGame();
+    //GAME SERVER CONNECTION INTITION HERE
+    public void connect(String hostname, String username, int port)
+    {
+    	if (this.connector == null)
+    	{
+    		this.connector = new NetworkConnector(hostname, username, port, this);
+    	}
+    	else
+    	{
+    		this.connector.retry(hostname, port);
+    	}
 
-    /*
-    GAME SERVER CONNECTION INTITION HERE
-     */
+    }
+
+    public Boolean getConnectStatus()
+    {
+    	return this.connector.getStatus();
+    }
+
+    public void resetConnectionStatus()
+    {
+    	this.connector.resetStatus();
+    }
+
+    public void registerPlayer(Color color, Boolean playMode)
+    {
+    	this.connector.registerPlayer(color, playMode);
+    }
+
+    public void setPlayerID(int id)
+    {
+    	this.controlledBike = new Bike(id, this.connector);
+    }
+
+    public Boolean getPlayerStatus()
+    {
+    	return this.controlledBike != null;
+    }
 
     //turns the user bike north
     public void turnNorth(){
@@ -79,29 +88,44 @@ public class Grid extends JPanel {
     public void turnWest(){
         controlledBike.turnWest();
     }
-    //signals to stop moving
-    public void stop(){
-        controlledBike.stop();
-    }
+
     //popup saying you won
     public void won(){
-        JOptionPane.showMessageDialog(this, "You Win!");
-    }
+    	text.setForeground(Color.BLUE);
+    	text.setText("Congratuations " + this.connector.getUserName() + "! You Win!");
+       }
 
     //popup message you lost
-    public void lost(){
-        JOptionPane.showMessageDialog(this, "You Lost :/");
+    public void lost(String winner){
+
+    	text.setForeground(Color.RED);
+    	text.setText("You Lost :/ " + winner + " wins this round.");
     }
 
-    // bike controlled by the remote player
-    public Bike getServerBike(){
-        return serverBike;
+    public void clearMessage() {
+    	text.setText(null);
     }
 
     //method communication
 
     public NetworkConnector getConnector() {
-        return connector;
+        return this.connector;
+    }
+
+    public void displayWinLose(GameState gs)
+    {
+      if (this.controlledBike != null)
+      {
+
+    		if (gs.getWinner() == this.controlledBike.player)
+    	  	{
+    	  		this.won();
+    	  	}
+    	  	else if (gs.getWinner() != -1)
+    	  	{
+    	  		this.lost(gs.getWinnerName());
+    	  	}
+    	 }
     }
 
     //paints the grid
@@ -115,19 +139,80 @@ public class Grid extends JPanel {
         g.drawLine(0, HEIGHT, WIDTH, HEIGHT); //BOTTOM
 
         //draw the snakes
-        for (int x = 0, x < GRID_WIDTH; x++) {
-            for (int y = 0; y <GRID_HEIGHT; y++) {
-              if (grid[x][y] != 0){
-                  if (grid[x][y] == 1){
-                      g.setColor(PLAYER1);
-                  } else if (grid [x][y] ==2){
-                      g.setColor(PLAYER2);
-                  }
-                  g.fillRect(x * 5, y *5, 5, 5);
-              }
-            }
+        //System.out.println("It's time to repaint the screen");
+        //This information should be stored by the GameState
+        if (this.connector != null)
+        {
+        	Graphics2D g2 = (Graphics2D) g.create();
+        	//System.out.println("Let's Draw the Game State!");
+        	drawGameState(this.connector.getGameState(), g2);
         }
-        g.setColor(userColor);
-        g.fillRect(0,501,501,505);
     }
+
+    private void drawGameState(GameState gameState, Graphics2D g) {
+
+    	if (gameState == null)
+    	{
+    		return;   // No game to display yet!
+    	}
+ 
+      	if (gameState.getGameActivity())
+      	{
+      		drawGrid(gameState, g);
+      	}
+      	else
+      	{
+      		 g.setColor(Color.BLACK);
+             g.setFont(new Font("Serif", Font.BOLD, 28));
+             if (gameState.getPlayers().size() < 2)
+             {
+            	 g.drawString("Please wait for more players to join.", WIDTH/2 - WIDTH/4, HEIGHT/2);
+             }
+             else
+             {
+            	 g.drawString("The next round will commence shortly.", WIDTH/2 - WIDTH/4, HEIGHT/2);
+             }
+
+      	}
+
+    }
+
+     //Draw the Grid with the players
+     private void drawGrid(GameState gameState, Graphics2D g) {
+    	 //draw the names of players
+    	 for (GameState.Player p: gameState.getPlayers()) {
+    		 g.setColor(Color.DARK_GRAY);
+             g.setFont(new Font("Serif", Font.BOLD, 15));
+             if (p.getName() != null)
+             {
+            	 //make it clear which player belongs to this client
+            	 if (this.getPlayerStatus() && p.playerID == this.controlledBike.player)
+            	 {
+            		 g.setColor(Color.BLACK);
+            		 g.setFont(new Font("Serif", Font.BOLD, 18));
+            	 }
+            	 g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
+             }
+         }
+    	 for (int x = 0; x < GRID_WIDTH; x++) {
+    		 int[][] grid = gameState.getGrid();
+
+             for (int y = 0; y <GRID_HEIGHT; y++) {
+               if (grid[x][y] != 0){
+            	   for (GameState.Player p: gameState.getPlayers()) {
+            		   if (grid[x][y] == p.gridID){
+                           g.setColor(p.appearance);
+                           g.fillRect(x * 5, y *5, 5, 5);
+
+                           break;
+                       }
+                   }
+
+
+               }
+             }
+         }
+     }
+
+
 }
