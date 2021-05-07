@@ -134,7 +134,7 @@ public class GameEngine implements Runnable {
             debug.println(10, "(GameEngine.run) Executing...");
 
             // If enough players to start
-            if (gameState.getPlayers().size() >= NUM_PLAYERS_BEFORE_START && keepGoing) {
+            if (gameState.getNumPlayers() >= NUM_PLAYERS_BEFORE_START && keepGoing) {
                 startGame();
             }
 
@@ -172,8 +172,11 @@ public class GameEngine implements Runnable {
         // If so, the player must be removed from the game
         int size = players.size();
         for (int i = 0; i < size; i++) {
-            GameState.Player p = players.get(i);
-            p.collisions(); // Compute collisions for this player
+        	if (players.get(i) != null)
+        	{
+        		  GameState.Player p = players.get(i);
+                  p.collisions(); // Compute collisions for this player
+        	}   
 
         }
     }
@@ -182,11 +185,15 @@ public class GameEngine implements Runnable {
         ArrayList<GameState.Player> players = gameState.getPlayers();
         int size = players.size();
         for (int i = 0; i < size; i++) {
-            GameState.Player p = players.get(i);
-            if (!p.dead)
-            {
-            	p.move();
-            }
+        	if (players.get(i) != null)
+        	{
+        		 GameState.Player p = players.get(i);
+                 if (!p.dead)
+                 {
+                 	p.move();
+                 }
+        	}
+           
         }
 
         // next, we need to update the grid to reflect the new position of each player
@@ -202,12 +209,16 @@ public class GameEngine implements Runnable {
         if (size > 0) {
             int alive = 0;
             for (int i = 0; i < size; i++) {
-                GameState.Player p = players.get(i);
-                if (!p.dead) {
-                    alive++;
-                    winnerID = i;
-                    winnerName = p.name;
-                }
+            	if (players.get(i) != null)
+            	{
+            		 GameState.Player p = players.get(i);
+                     if (!p.dead) {
+                         alive++;
+                         winnerID = i;
+                         winnerName = p.name;
+                     }
+            	}
+               
             }
             // a multiplayer game ends when there is only one player left standing
             if (size > 1) {

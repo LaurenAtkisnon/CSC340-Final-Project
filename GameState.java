@@ -154,14 +154,14 @@ public class GameState implements Cloneable, Serializable {
 
     private int winnerID = -1;
     private String winnerName = null;
-
+    private int numPlayers = 0;
     private boolean activeGame = false;
 
     private int[][] grid = new int[GRID_WIDTH][GRID_HEIGHT]; // keeps track of where each player has been
 
     public GameState() {
         players = new ArrayList<Player>();
-
+        
         resetGrid();
     }
 
@@ -191,6 +191,7 @@ public class GameState implements Cloneable, Serializable {
      **/
     public int addPlayer(String name, Color color, int initialDirection, boolean activeGame) {
         // Pick an initial location that has not yet been visited
+    	this.numPlayers ++;
         Point p = null;
         if (activeGame) {
             p = new Point(GRID_WIDTH + 10, GRID_HEIGHT + 10);
@@ -202,10 +203,17 @@ public class GameState implements Cloneable, Serializable {
         players.add(new Player(playerID, name, gridID, (int) p.getX(), (int) p.getY(), color, initialDirection));
         return players.size() - 1;
     }
+    
+    public int getNumPlayers()
+    {
+    	return this.numPlayers;
+    }
 
     public void removePlayer(int iD)
     {
-    	players.removeIf(p -> (p.playerID == iD));
+    	//players.removeIf(p -> (p.playerID == iD));
+    	players.set(iD, null);
+    	this.numPlayers --;
     }
 
     /** Determines a location on the grid that has yet to be occupied */
@@ -229,9 +237,13 @@ public class GameState implements Cloneable, Serializable {
     public void resetPlayers() {
         Point startPos = null;
         for (GameState.Player p : this.getPlayers()) {
-            p.dead = false;
-            startPos = starterPos();
-            p.setLocation((int) startPos.getX(), (int) startPos.getY());
+        	if (p != null)
+        	{
+    		  p.dead = false;
+              startPos = starterPos();
+              p.setLocation((int) startPos.getX(), (int) startPos.getY());
+        	}
+          
         }
     }
 
@@ -281,9 +293,12 @@ public class GameState implements Cloneable, Serializable {
 
     public void updateGrid() {
         for (GameState.Player p : this.getPlayers()) {
-            if (!p.dead) {
-                this.grid[p.locx][p.locy] = p.gridID;
-            }
+        	if (p != null)
+        	{
+        		  if (!p.dead) {
+                      this.grid[p.locx][p.locy] = p.gridID;
+                  }
+        	}  
         }
     }
 

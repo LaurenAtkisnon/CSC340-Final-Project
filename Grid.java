@@ -175,7 +175,7 @@ public class Grid extends JPanel {
       	{
       		 g.setColor(Color.BLACK);
              g.setFont(new Font("Serif", Font.BOLD, 28));
-             if (gameState.getPlayers().size() < 2)
+             if (gameState.getNumPlayers() < 2)
              {
             	 g.drawString("Please wait for more players to join.", WIDTH/2 - WIDTH/4, HEIGHT/2);
              }
@@ -192,18 +192,22 @@ public class Grid extends JPanel {
      private void drawGrid(GameState gameState, Graphics2D g) {
     	 //draw the names of players
     	 for (GameState.Player p: gameState.getPlayers()) {
-    		 g.setColor(Color.DARK_GRAY);
-             g.setFont(new Font("Serif", Font.BOLD, 15));
-             if (p.getName() != null)
-             {
-            	 //make it clear which player belongs to this client
-            	 if (this.getPlayerStatus() && p.playerID == this.controlledBike.player)
-            	 {
-            		 g.setColor(Color.BLACK);
-            		 g.setFont(new Font("Serif", Font.BOLD, 18));
-            	 }
-            	 g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
-             }
+    		 if (p != null)
+    		 {
+    			 g.setColor(Color.DARK_GRAY);
+                 g.setFont(new Font("Serif", Font.BOLD, 15));
+                 if (p.getName() != null)
+                 {
+                	 //make it clear which player belongs to this client
+                	 if (this.getPlayerStatus() && p.playerID == this.controlledBike.player)
+                	 {
+                		 g.setColor(Color.BLACK);
+                		 g.setFont(new Font("Serif", Font.BOLD, 18));
+                	 }
+                	 g.drawString(p.getName(), (float) p.locx * 5 + 5, (float) p.locy * 5);
+                 }
+    		 }
+    		
          }
     	 for (int x = 0; x < GRID_WIDTH; x++) {
     		 int[][] grid = gameState.getGrid();
@@ -211,12 +215,16 @@ public class Grid extends JPanel {
              for (int y = 0; y <GRID_HEIGHT; y++) {
                if (grid[x][y] != 0){
             	   for (GameState.Player p: gameState.getPlayers()) {
-            		   if (grid[x][y] == p.gridID){
-                           g.setColor(p.appearance);
-                           g.fillRect(x * 5, y *5, 5, 5);
+            		   if (p != null)
+            		   {
+            			   if (grid[x][y] == p.gridID){
+                               g.setColor(p.appearance);
+                               g.fillRect(x * 5, y *5, 5, 5);
 
-                           break;
-                       }
+                               break;
+                           }
+            		   }
+            		  
                    }
 
 
